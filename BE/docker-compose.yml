@@ -1,0 +1,43 @@
+version: '3.1'
+services:
+  redis:
+    container_name: redis
+    image: redis:7.0-rc-alpine
+    ports:
+      - 6379:6379
+  mongodb:
+    container_name: mongodb
+    image: mongo:latest
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: docker
+      MONGO_INITDB_ROOT_PASSWORD: docker
+  backend:
+    depends_on:
+      - 'mongodb'
+    container_name: backend
+    build:
+      context: './'
+      dockerfile: 'Dockerfile'
+    restart: always
+    environment:
+      - DEBUG=SERVER:*
+      - APP_SECRET=SIxexAGN0e9R8slV1hXbs2qpNRliWOe5391Sv66T
+      - PORT=8000
+      - HOST=0.0.0.0
+      - ENVIRONMENT=local
+      - APPLICATION_NAME=Express_Boilerplate
+      - ADAPTER=mongodb
+      - DB_HOST=mongodb
+      - DB_PORT=27017
+      - DB_NAME=SampleDb
+      - DB_USER=docker
+      - DB_PASSWORD=docker
+      - AUTH_SOURCE=admin
+    command: bash -c "npm run start"
+    ports:
+      - 8000:8000
+    links:
+      - mongodb
