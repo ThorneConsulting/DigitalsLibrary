@@ -9,7 +9,7 @@ provider:
     DYNAMO_DB_TABLE_NAME: ${self:custom.myDigitalsMetaData}
 
 custom:
-  myDigitalsMetaData: my-digitals-meta-data-${self.provider.stage}
+  myDigitalsMetaData: my-digitals-meta-data-${self:provider.stage}
 
 plugins:
   plugins:
@@ -86,8 +86,8 @@ resources:
     MyDigitalsMetaDataTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self.custom.myDigitalsMetaData}
-        AttributeDefinition:
+        TableName: ${self:custom.myDigitalsMetaData}
+        AttributeDefinitions:
           - AttributeName: userId
             AttributeType: S
         KeySchema:

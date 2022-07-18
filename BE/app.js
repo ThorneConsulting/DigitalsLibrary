@@ -4,15 +4,8 @@ const { parser } = require("aws-multipart-parser");
 const {
   CreateBucketCommand,
   HeadBucketCommand,
-  CopyObjectCommand,
 } = require("@aws-sdk/client-s3");
-const {
-  GetItemCommand,
-  PutItemCommand,
-  DeleteItemCommand,
-  ScanCommand,
-  UpdateItemCommand,
-} = require("@aws-sdk/client-dynamodb");
+const { GetItemCommand, PutItemCommand } = require("@aws-sdk/client-dynamodb");
 const { marshall, unmarshall } = require("@aws-sdk/util-dynamodb");
 const { Upload } = require("@aws-sdk/lib-storage");
 
