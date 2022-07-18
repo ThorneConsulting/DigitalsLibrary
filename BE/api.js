@@ -76,31 +76,42 @@ const uploadUserFile = async (event) => {
 
 const createUserBucketIfNotExist = async (event) => {
   const USER_ID = event.pathParameters.userId;
-
-  const DOES_BUCKET_EXISTS = await S3_HELPER.send(
-    new HeadBucketCommand({ Bucket: USER_ID })
-  );
-  if (DOES_BUCKET_EXISTS.$metadata.httpStatusCode == 403) {
+  var DOES_BUCKET_EXISTS;
+  try {
+    DOES_BUCKET_EXISTS = await S3_HELPER.send(
+      new HeadBucketCommand({ Bucket: USER_ID })
+    );
+  } catch (error) {
+    console.error(error);
     response.statusCode = DOES_BUCKET_EXISTS.$metadata.httpStatusCode;
     response.body = JSON.stringify({
-      message: "You do not have access permission to view this resource",
-      errorMessage: "Unauthorized",
-      errorStack: {},
+      errorMessage: error.message,
+      errorStack: error.stack,
     });
+  } finally {
+    if (DOES_BUCKET_EXISTS.$metadata.httpStatusCode == 403) {
+      response.statusCode = DOES_BUCKET_EXISTS.$metadata.httpStatusCode;
+      response.body = JSON.stringify({
+        message: "You do not have access permission to view this resource",
+        errorMessage: "Unauthorized",
+        errorStack: {},
+      });
+      return response;
+    }
+
+    if (DOES_BUCKET_EXISTS.$metadata.httpStatusCode == 404) {
+      const CREATE_BUCKET_RESULT = await S3_HELPER.send(
+        new CreateBucketCommand({
+          Bucket: USER_ID,
+          CreateBucketConfiguration: { LocationConstraint: "ap-southeast-2" },
+          ServerSideEncryption: "AES256",
+          Versio,
+        })
+      );
+    }
+    const response = { statusCode: 201, messag: "Created", data: {} };
     return response;
   }
-  if (DOES_BUCKET_EXISTS.$metadata.httpStatusCode == 404) {
-    const CREATE_BUCKET_RESULT = await S3_HELPER.send(
-      new CreateBucketCommand({
-        Bucket: USER_ID,
-        CreateBucketConfiguration: { LocationConstraint: "ap-southeast-2" },
-        ServerSideEncryption: "AES256",
-        Versio,
-      })
-    );
-  }
-  const response = { statusCode: 201, messag: "Created", data: {} };
-  return response;
 };
 async function createRecordInDynamo(USER_ID, FILE, response) {
   const DYNAMO_DB_PARAMS = {
