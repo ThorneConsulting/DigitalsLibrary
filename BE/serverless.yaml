@@ -24,8 +24,8 @@ functions:
   getUserFiles:
     handler: api.getUserFiles
     name: get-user-files
-    memorySize: 128 # MB
-    timeout: 5 # seconds
+    memorySize: 256 # MB
+    timeout: 20 # seconds
     events:
       - http:
           path: /users/{userId}/files
@@ -38,8 +38,8 @@ functions:
   uploadUserFile:
     handler: api.uploadUserFile
     name: upload-user-file
-    memorySize: 128 # MB
-    timeout: 5 # seconds
+    memorySize: 256 # MB
+    timeout: 20 # seconds
     events:
       - http:
           path: /users/{userId}/file
@@ -56,8 +56,8 @@ functions:
   deleteUserFile:
     handler: api.deleteUserFile
     name: delete-user-file
-    memorySize: 128 # MB
-    timeout: 5 # seconds
+    memorySize: 256 # MB
+    timeout: 20 # seconds
     events:
       - http:
           path: /users/{userId}/file
@@ -74,8 +74,8 @@ functions:
   createUserBucketIfNotExist:
     handler: api.createUserBucketIfNotExist
     name: create-user-bucket-if-not-exist
-    memorySize: 128 # MB
-    timeout: 5 # seconds
+    memorySize: 256 # MB
+    timeout: 20 # seconds
     events:
       - http:
           path: /users/{userId}/create-user-bucket
