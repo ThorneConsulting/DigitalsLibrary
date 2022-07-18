@@ -31,7 +31,7 @@ const getUserFiles = async (event) => {
     response.statusCode = 500;
     response.body = JSON.stringify({
       message: "Failed to get record",
-      errorMessage: e.message,
+      errorMessage: error.message,
       errorStack: error.stack,
     });
   }
@@ -66,7 +66,7 @@ const uploadUserFile = async (event) => {
     response.statusCode = 500;
     response.body = JSON.stringify({
       message: "Failed to get record",
-      errorMessage: e.message,
+      errorMessage: error.message,
       errorStack: error.stack,
     });
   }

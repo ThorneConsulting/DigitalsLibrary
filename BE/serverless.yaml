@@ -33,7 +33,7 @@ functions:
     iamRoleStatements:
       - Effect: "Allow"
         Action:
-          - "dynamoDB:Scan"
+          - "dynamoDB:GetItem"
         Resource: !GetAtt MyDigitalsMetaDataTable.Arn
   uploadUserFile:
     handler: api.uploadUserFile
