@@ -12,6 +12,10 @@ provider:
 
 custom:
   myDigitalsMetaData: my-digitals-meta-data-${self:provider.stage}
+  apigwBinary:
+    types: #list of mime-types
+      - "image/jpeg"
+      - "text/html"
 
 plugins:
   - serverless-apigw-binary
@@ -38,7 +42,7 @@ functions:
     timeout: 5 # seconds
     events:
       - http:
-          path: /users/{userId}/create-user-bucket
+          path: /users/{userId}/file
           method: POST
     iamRoleStatements:
       - Effect: "Allow"
@@ -74,7 +78,7 @@ functions:
     timeout: 5 # seconds
     events:
       - http:
-          path: /users/{userId}/file
+          path: /users/{userId}/create-user-bucket
           method: POST
     iamRoleStatements:
       - Effect: "Allow"
