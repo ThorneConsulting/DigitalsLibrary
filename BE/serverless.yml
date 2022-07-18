@@ -12,9 +12,8 @@ custom:
   myDigitalsMetaData: my-digitals-meta-data-${self:provider.stage}
 
 plugins:
-  plugins:
-    - serverless-iam-role-per-function
-    - serverless-apigw-binary
+  - serverless-iam-role-per-function
+  - serverless-apigw-binary
 
 functions:
   getUserFiles:
@@ -26,14 +25,11 @@ functions:
       - http:
           path: /users/{userId}/files
           method: GET
-    provider:
-      iam:
-        role:
-          statements:
-            - Effects: "Allow"
-              Action:
-                - "dynamoDB:Scan"
-              Resource: !GetAtt MyDigitalsMetaDataTable.Arn
+    iamRoleStatements:
+      - Effects: "Allow"
+        Action:
+          - "dynamoDB:Scan"
+        Resource: !GetAtt MyDigitalsMetaDataTable.Arn
   uploadUserFile:
     handler: api.uploadUserFile
     name: upload-user-file
@@ -43,18 +39,15 @@ functions:
       - http:
           path: /users/{userId}/file
           method: POST
-    provider:
-      iam:
-        role:
-          statements:
-            - Effects: "Allow"
-              Action:
-                - "dynamoDB:PutItem"
-              Resource: !GetAtt MyDigitalsMetaDataTable.Arn
-            - Effects: "Allow"
-              Action:
-                - "s3: *"
-              Resource: "*"
+    iamRoleStatements:
+      - Effects: "Allow"
+        Action:
+          - "dynamoDB:PutItem"
+        Resource: !GetAtt MyDigitalsMetaDataTable.Arn
+      - Effects: "Allow"
+        Action:
+          - "s3: *"
+        Resource: "*"
   deleteUserFile:
     handler: api.deleteUserFile
     name: delete-user-file
@@ -64,18 +57,15 @@ functions:
       - http:
           path: /users/{userId}/file
           method: DELETE
-    provider:
-      iam:
-        role:
-          statements:
-            - Effects: "Allow"
-              Action:
-                - "dynamoDB:DeleteItem"
-              Resource: !GetAtt MyDigitalsMetaDataTable.Arn
-            - Effects: "Allow"
-              Action:
-                - "s3: *"
-              Resource: "*"
+    iamRoleStatements:
+      - Effects: "Allow"
+        Action:
+          - "dynamoDB:DeleteItem"
+        Resource: !GetAtt MyDigitalsMetaDataTable.Arn
+      - Effects: "Allow"
+        Action:
+          - "s3: *"
+        Resource: "*"
   createUserBucketIfNotExist:
     handler: api.createUserBucketIfNotExist
     name: create-user-bucket-if-not-exist
