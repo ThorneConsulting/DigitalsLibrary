@@ -20,67 +20,79 @@ functions:
   getUserFiles:
     handler: api.getUserFiles
     name: get-user-files
-    memory: 128 # MB
+    memorySize: 128 # MB
     timeout: 5 # seconds
     events:
       - http:
           path: /users/{userId}/files
           method: GET
-    iamRoleStatements:
-      - Effects: "Allow"
-        Action:
-          - "dynamoDB:Scan"
-        Resource: !GetAtt MyDigitalsMetaDataTable.Arn
+    provider:
+      iam:
+        role:
+          statements:
+            - Effects: "Allow"
+              Action:
+                - "dynamoDB:Scan"
+              Resource: !GetAtt MyDigitalsMetaDataTable.Arn
   uploadUserFile:
     handler: api.uploadUserFile
     name: upload-user-file
-    memory: 128 # MB
+    memorySize: 128 # MB
     timeout: 5 # seconds
     events:
       - http:
           path: /users/{userId}/file
           method: POST
-    iamRoleStatements:
-      - Effects: "Allow"
-        Action:
-          - "dynamoDB:PutItem"
-        Resource: !GetAtt MyDigitalsMetaDataTable.Arn
-      - Effects: "Allow"
-        Action:
-          - "s3: *"
-        Resource: "*"
+    provider:
+      iam:
+        role:
+          statements:
+            - Effects: "Allow"
+              Action:
+                - "dynamoDB:PutItem"
+              Resource: !GetAtt MyDigitalsMetaDataTable.Arn
+            - Effects: "Allow"
+              Action:
+                - "s3: *"
+              Resource: "*"
   deleteUserFile:
     handler: api.deleteUserFile
     name: delete-user-file
-    memory: 128 # MB
+    memorySize: 128 # MB
     timeout: 5 # seconds
     events:
       - http:
           path: /users/{userId}/file
           method: DELETE
-    iamRoleStatements:
-      - Effects: "Allow"
-        Action:
-          - "dynamoDB:DeleteItem"
-        Resource: !GetAtt MyDigitalsMetaDataTable.Arn
-      - Effects: "Allow"
-        Action:
-          - "s3: *"
-        Resource: "*"
+    provider:
+      iam:
+        role:
+          statements:
+            - Effects: "Allow"
+              Action:
+                - "dynamoDB:DeleteItem"
+              Resource: !GetAtt MyDigitalsMetaDataTable.Arn
+            - Effects: "Allow"
+              Action:
+                - "s3: *"
+              Resource: "*"
   createUserBucketIfNotExist:
     handler: api.createUserBucketIfNotExist
     name: create-user-bucket-if-not-exist
-    memory: 128 # MB
+    memorySize: 128 # MB
     timeout: 5 # seconds
     events:
       - http:
           path: /users/{userId}/file
           method: POST
-    iamRoleStatements:
-      - Effects: "Allow"
-        Action:
-          - "s3: *"
-        Resource: "*"
+    provider:
+      iam:
+        role:
+          statements:
+            - Effects: "Allow"
+              Action:
+                - "s3: *"
+              Resource: "*"
 resources:
   Resources:
     MyDigitalsMetaDataTable:
