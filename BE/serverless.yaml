@@ -1,0 +1,98 @@
+service: my-digitals-api
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  stage: dev
+  region: ap-southeast-2
+  environment:
+    DYNAMO_DB_TABLE_NAME: ${self:custom.myDigitalsMetaData}
+
+custom:
+  myDigitalsMetaData: my-digitals-meta-data-${self.provider.stage}
+
+plugins:
+  plugins:
+    - serverless-iam-role-per-function
+    - serverless-apigw-binary
+
+functions:
+  getUserFiles:
+    handler: api.getUserFiles
+    name: get-user-files
+    memory: 128 # MB
+    timeout: 5 # seconds
+    events:
+      - http:
+          path: /users/{userId}/files
+          method: GET
+    iamRoleStatements:
+      - Effects: "Allow"
+        Action:
+          - "dynamoDB:Scan"
+        Resource: !GetAtt MyDigitalsMetaDataTable.Arn
+  uploadUserFile:
+    handler: api.uploadUserFile
+    name: upload-user-file
+    memory: 128 # MB
+    timeout: 5 # seconds
+    events:
+      - http:
+          path: /users/{userId}/file
+          method: POST
+    iamRoleStatements:
+      - Effects: "Allow"
+        Action:
+          - "dynamoDB:PutItem"
+        Resource: !GetAtt MyDigitalsMetaDataTable.Arn
+      - Effects: "Allow"
+        Action:
+          - "s3: *"
+        Resource: "*"
+  deleteUserFile:
+    handler: api.deleteUserFile
+    name: delete-user-file
+    memory: 128 # MB
+    timeout: 5 # seconds
+    events:
+      - http:
+          path: /users/{userId}/file
+          method: DELETE
+    iamRoleStatements:
+      - Effects: "Allow"
+        Action:
+          - "dynamoDB:DeleteItem"
+        Resource: !GetAtt MyDigitalsMetaDataTable.Arn
+      - Effects: "Allow"
+        Action:
+          - "s3: *"
+        Resource: "*"
+  createUserBucketIfNotExist:
+    handler: api.createUserBucketIfNotExist
+    name: create-user-bucket-if-not-exist
+    memory: 128 # MB
+    timeout: 5 # seconds
+    events:
+      - http:
+          path: /users/{userId}/file
+          method: POST
+    iamRoleStatements:
+      - Effects: "Allow"
+        Action:
+          - "s3: *"
+        Resource: "*"
+resources:
+  Resources:
+    MyDigitalsMetaDataTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self.custom.myDigitalsMetaData}
+        AttributeDefinition:
+          - AttributeName: userId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
