@@ -1,5 +1,5 @@
-org: vibhavdeo
-app: my-digitals-api
+#org: vibhavdeo
+#app: my-digitals-api
 service: my-digitals-api
 
 provider:
