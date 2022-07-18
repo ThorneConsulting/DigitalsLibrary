@@ -74,14 +74,11 @@ functions:
       - http:
           path: /users/{userId}/file
           method: POST
-    provider:
-      iam:
-        role:
-          statements:
-            - Effect: "Allow"
-              Action:
-                - "s3: *"
-              Resource: "*"
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "s3: *"
+        Resource: "*"
 resources:
   Resources:
     MyDigitalsMetaDataTable:
