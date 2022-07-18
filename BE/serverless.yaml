@@ -12,9 +12,8 @@ custom:
   myDigitalsMetaData: my-digitals-meta-data-${self:provider.stage}
 
 plugins:
-  - serverless-iam-role-per-function
   - serverless-apigw-binary
-
+  - serverless-iam-roles-per-function
 functions:
   getUserFiles:
     handler: api.getUserFiles
