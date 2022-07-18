@@ -25,7 +25,7 @@ functions:
           path: /users/{userId}/files
           method: GET
     iamRoleStatements:
-      - Effects: "Allow"
+      - Effect: "Allow"
         Action:
           - "dynamoDB:Scan"
         Resource: !GetAtt MyDigitalsMetaDataTable.Arn
@@ -39,11 +39,11 @@ functions:
           path: /users/{userId}/file
           method: POST
     iamRoleStatements:
-      - Effects: "Allow"
+      - Effect: "Allow"
         Action:
           - "dynamoDB:PutItem"
         Resource: !GetAtt MyDigitalsMetaDataTable.Arn
-      - Effects: "Allow"
+      - Effect: "Allow"
         Action:
           - "s3: *"
         Resource: "*"
@@ -57,11 +57,11 @@ functions:
           path: /users/{userId}/file
           method: DELETE
     iamRoleStatements:
-      - Effects: "Allow"
+      - Effect: "Allow"
         Action:
           - "dynamoDB:DeleteItem"
         Resource: !GetAtt MyDigitalsMetaDataTable.Arn
-      - Effects: "Allow"
+      - Effect: "Allow"
         Action:
           - "s3: *"
         Resource: "*"
@@ -78,7 +78,7 @@ functions:
       iam:
         role:
           statements:
-            - Effects: "Allow"
+            - Effect: "Allow"
               Action:
                 - "s3: *"
               Resource: "*"
