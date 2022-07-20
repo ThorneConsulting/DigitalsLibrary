@@ -81,7 +81,7 @@ const createUserBucketIfNotExist = async (event) => {
     DOES_BUCKET_EXISTS = await S3_HELPER.send(
       new HeadBucketCommand({ Bucket: USER_ID })
     );
-    console.log(JSON.stringify(DOES_BUCKET_EXISTS));
+    console.log(JSON.stringify("RESPONSE", DOES_BUCKET_EXISTS));
   } catch (error) {
     console.error(error);
     response.statusCode = DOES_BUCKET_EXISTS.$metadata.httpStatusCode;
@@ -90,25 +90,23 @@ const createUserBucketIfNotExist = async (event) => {
       errorStack: error.stack,
     });
   } finally {
-    if (DOES_BUCKET_EXISTS.$metadata.httpStatusCode == 403) {
-      response.statusCode = DOES_BUCKET_EXISTS.$metadata.httpStatusCode;
-      response.body = JSON.stringify({
-        message: "You do not have access permission to view this resource",
-        errorMessage: "Unauthorized",
-        errorStack: {},
-      });
-      return response;
-    }
+    // if (DOES_BUCKET_EXISTS.$metadata.httpStatusCode == 403) {
+    //   response.statusCode = DOES_BUCKET_EXISTS.$metadata?.httpStatusCode;
+    //   response.body = JSON.stringify({
+    //     message: "You do not have access permission to view this resource",
+    //     errorMessage: "Unauthorized",
+    //     errorStack: {},
+    //   });
+    //   return response;
+    // }
+    const CREATE_BUCKET_RESULT = await S3_HELPER.send(
+      new CreateBucketCommand({
+        Bucket: USER_ID,
+        CreateBucketConfiguration: { LocationConstraint: "ap-southeast-2" },
+        ServerSideEncryption: "AES256",
+      })
+    );
 
-    if (DOES_BUCKET_EXISTS.$metadata.httpStatusCode == 404) {
-      const CREATE_BUCKET_RESULT = await S3_HELPER.send(
-        new CreateBucketCommand({
-          Bucket: USER_ID,
-          CreateBucketConfiguration: { LocationConstraint: "ap-southeast-2" },
-          ServerSideEncryption: "AES256",
-        })
-      );
-    }
     const response = { statusCode: 201, messag: "Created", data: {} };
     return response;
   }
