@@ -76,7 +76,8 @@ const uploadUserFile = async (event) => {
 
 const createUserBucketIfNotExist = async (event) => {
   const USER_ID = event.pathParameters.userId;
-  var DOES_BUCKET_EXISTS;
+  let response = { statusCode: 200 };
+  let DOES_BUCKET_EXISTS;
   try {
     await S3_HELPER.send(new HeadBucketCommand({ Bucket: USER_ID }));
   } catch (error) {
@@ -101,12 +102,18 @@ const createUserBucketIfNotExist = async (event) => {
           ServerSideEncryption: "AES256",
         })
       );
+
+      if (CREATE_BUCKET_RESULT.$metadata.httpStatusCode == 200) {
+        response.statusCode = CREATE_BUCKET_RESULT.$metadata.httpStatusCode;
+        response.body = JSON.stringify({
+          message: "Bucket created successfully",
+          data: {},
+        });
+      }
       console.log("CREATED", CREATE_BUCKET_RESULT);
     }
-
-    const response = { statusCode: 201, messag: "Created", data: {} };
-    return response;
   }
+  return response;
 };
 async function createRecordInDynamo(USER_ID, FILE, response) {
   const DYNAMO_DB_PARAMS = {
