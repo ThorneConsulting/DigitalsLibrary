@@ -78,35 +78,31 @@ const createUserBucketIfNotExist = async (event) => {
   const USER_ID = event.pathParameters.userId;
   var DOES_BUCKET_EXISTS;
   try {
-    DOES_BUCKET_EXISTS = await S3_HELPER.send(
-      new HeadBucketCommand({ Bucket: USER_ID })
-    );
-    console.log("RESPONSE", JSON.stringify(DOES_BUCKET_EXISTS));
+    await S3_HELPER.send(new HeadBucketCommand({ Bucket: USER_ID }));
   } catch (error) {
     console.error("ERROR", error);
-    response.statusCode = DOES_BUCKET_EXISTS.$metadata.httpStatusCode;
-    response.body = JSON.stringify({
-      errorMessage: error.message,
-      errorStack: error.stack,
-    });
+    DOES_BUCKET_EXISTS = error.$metadata;
   } finally {
-    // if (DOES_BUCKET_EXISTS.$metadata.httpStatusCode == 403) {
-    //   response.statusCode = DOES_BUCKET_EXISTS.$metadata?.httpStatusCode;
-    //   response.body = JSON.stringify({
-    //     message: "You do not have access permission to view this resource",
-    //     errorMessage: "Unauthorized",
-    //     errorStack: {},
-    //   });
-    //   return response;
-    // }
-    console.log("RESPONSE", JSON.stringify(DOES_BUCKET_EXISTS));
-    const CREATE_BUCKET_RESULT = await S3_HELPER.send(
-      new CreateBucketCommand({
-        Bucket: USER_ID,
-        CreateBucketConfiguration: { LocationConstraint: "ap-southeast-2" },
-        ServerSideEncryption: "AES256",
-      })
-    );
+    if (DOES_BUCKET_EXISTS.httpStatusCode == 403) {
+      response.statusCode = DOES_BUCKET_EXISTS.httpStatusCode;
+      response.body = JSON.stringify({
+        message: "You do not have access permission to view this resource",
+        errorMessage: "Unauthorized",
+        errorStack: DOES_BUCKET_EXISTS.errorStack,
+      });
+      return response;
+    }
+
+    if (DOES_BUCKET_EXISTS.httpStatusCode == 404) {
+      const CREATE_BUCKET_RESULT = await S3_HELPER.send(
+        new CreateBucketCommand({
+          Bucket: USER_ID,
+          CreateBucketConfiguration: { LocationConstraint: "ap-southeast-2" },
+          ServerSideEncryption: "AES256",
+        })
+      );
+      console.log("CREATED", CREATE_BUCKET_RESULT);
+    }
 
     const response = { statusCode: 201, messag: "Created", data: {} };
     return response;
