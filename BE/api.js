@@ -81,6 +81,7 @@ const createUserBucketIfNotExist = async (event) => {
     DOES_BUCKET_EXISTS = await S3_HELPER.send(
       new HeadBucketCommand({ Bucket: USER_ID })
     );
+    console.log(JSON.stringify(DOES_BUCKET_EXISTS));
   } catch (error) {
     console.error(error);
     response.statusCode = DOES_BUCKET_EXISTS.$metadata.httpStatusCode;
@@ -105,7 +106,6 @@ const createUserBucketIfNotExist = async (event) => {
           Bucket: USER_ID,
           CreateBucketConfiguration: { LocationConstraint: "ap-southeast-2" },
           ServerSideEncryption: "AES256",
-          Versio,
         })
       );
     }
