@@ -51,7 +51,7 @@ functions:
         Resource: !GetAtt MyDigitalsMetaDataTable.Arn
       - Effect: "Allow"
         Action:
-          - "s3: *"
+          - "s3:*"
         Resource: "*"
   deleteUserFile:
     handler: api.deleteUserFile
@@ -69,7 +69,7 @@ functions:
         Resource: !GetAtt MyDigitalsMetaDataTable.Arn
       - Effect: "Allow"
         Action:
-          - "s3: *"
+          - "s3:*"
         Resource: "*"
   createUserBucketIfNotExist:
     handler: api.createUserBucketIfNotExist
@@ -83,7 +83,7 @@ functions:
     iamRoleStatements:
       - Effect: "Allow"
         Action:
-          - "s3: *"
+          - "s3:*"
         Resource: "*"
 resources:
   Resources:

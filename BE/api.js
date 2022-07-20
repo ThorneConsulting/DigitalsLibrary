@@ -81,9 +81,9 @@ const createUserBucketIfNotExist = async (event) => {
     DOES_BUCKET_EXISTS = await S3_HELPER.send(
       new HeadBucketCommand({ Bucket: USER_ID })
     );
-    console.log(JSON.stringify("RESPONSE", DOES_BUCKET_EXISTS));
+    console.log("RESPONSE", JSON.stringify(DOES_BUCKET_EXISTS));
   } catch (error) {
-    console.error(error);
+    console.error("ERROR", error);
     response.statusCode = DOES_BUCKET_EXISTS.$metadata.httpStatusCode;
     response.body = JSON.stringify({
       errorMessage: error.message,
@@ -99,6 +99,7 @@ const createUserBucketIfNotExist = async (event) => {
     //   });
     //   return response;
     // }
+    console.log("RESPONSE", JSON.stringify(DOES_BUCKET_EXISTS));
     const CREATE_BUCKET_RESULT = await S3_HELPER.send(
       new CreateBucketCommand({
         Bucket: USER_ID,
