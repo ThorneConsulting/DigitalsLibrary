@@ -1,6 +1,6 @@
 const DB_HELPER = require("./dbHelper");
 const S3_HELPER = require("./s3Helper");
-const { parser } = require("aws-multipart-parser");
+const { parse } = require("aws-multipart-parser");
 const {
   CreateBucketCommand,
   HeadBucketCommand,
@@ -43,7 +43,7 @@ const uploadUserFile = async (event) => {
   const response = { statusCode: 200 };
   const USER_ID = event.pathParameters.userId;
   try {
-    const FORM_DATA = parser(event, true);
+    const FORM_DATA = parse(event, true);
     const FILE = FORM_DATA.file;
     console.log("FORM_DATA", FORM_DATA);
     const upload = new Upload({
