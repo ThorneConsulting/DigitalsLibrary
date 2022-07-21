@@ -50,7 +50,7 @@ const uploadUserFile = async (event) => {
       client: S3_HELPER,
       params: {
         Bucket: USER_ID,
-        Key: FORM_DATA.file.fileName,
+        Key: FORM_DATA.file.filename,
         Body: FORM_DATA.file.content,
       },
     });
