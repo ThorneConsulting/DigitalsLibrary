@@ -14,8 +14,7 @@ custom:
   myDigitalsMetaData: my-digitals-meta-data-${self:provider.stage}
   apigwBinary:
     types: #list of mime-types
-      - "image/jpeg"
-      - "text/html"
+      - "multipart/form-data"
 
 plugins:
   - serverless-apigw-binary
