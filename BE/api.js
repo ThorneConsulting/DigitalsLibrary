@@ -51,7 +51,7 @@ const uploadUserFile = async (event) => {
       params: {
         Bucket: USER_ID,
         Key: FORM_DATA.file.fileName,
-        Body: FORM_DATA.file.content.data,
+        Body: FORM_DATA.file.content,
       },
     });
     upload.on("httpUploadProgress", (progress) => {
