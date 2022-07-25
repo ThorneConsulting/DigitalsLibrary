@@ -1,140 +1,116 @@
-const DB_HELPER = require("./dbHelper");
+const REPOSITORY = require("./repository");
+const UTILS = require("./utils");
 const S3_HELPER = require("./s3Helper");
+const REKOGNITION_HELPER = require("./rekognitionHelper");
 const { parse } = require("aws-multipart-parser");
-const {
-  CreateBucketCommand,
-  HeadBucketCommand,
-} = require("@aws-sdk/client-s3");
-const { GetItemCommand, PutItemCommand } = require("@aws-sdk/client-dynamodb");
-const { marshall, unmarshall } = require("@aws-sdk/util-dynamodb");
-const { Upload } = require("@aws-sdk/lib-storage");
 
 const getUserFiles = async (event) => {
-  const response = { statusCode: 200 };
-
+  let RESPONSE;
   try {
-    const PARAMS = {
-      TableName: process.env.DYNAMO_DB_TABLE_NAME,
-      Key: marshall({ userId: event.pathParameters.userId }),
-    };
-    const { Item } = await DB_HELPER.send(new GetItemCommand(PARAMS));
-    console.log("Found Item", Item);
+    const USER_ID = event.pathParameters.userId;
 
-    response.body = JSON.stringify({
-      message: "Successfully retrived user files",
-      data: Item ? unmarshall(Item) : {},
-      rawData: Item,
-    });
+    const RESULT = await REPOSITORY.GET_RECORD(USER_ID);
+
+    console.log("Found Item", RESULT);
+
+    RESPONSE = await UTILS.CREATE_RESPONSE(RESULT, "SUCCESS", 200);
   } catch (error) {
     console.error("Failed to get record");
+
     console.error(error);
-    response.statusCode = 500;
-    response.body = JSON.stringify({
-      message: "Failed to get record",
+
+    const ERROR = {
       errorMessage: error.message,
       errorStack: error.stack,
-    });
+    };
+
+    RESPONSE = await UTILS.CREATE_RESPONSE(ERROR, "ERROR", 500);
   }
 
-  return response;
+  return RESPONSE;
 };
 
 const uploadUserFile = async (event) => {
-  const response = { statusCode: 200 };
+  let RESPONSE;
   const USER_ID = event.pathParameters.userId;
   try {
     const FORM_DATA = parse(event, true);
     const FILE = FORM_DATA.file;
     console.log("FORM_DATA", FORM_DATA);
-    const upload = new Upload({
-      client: S3_HELPER,
-      params: {
-        Bucket: USER_ID,
-        Key: FORM_DATA.file.filename,
-        Body: FORM_DATA.file.content,
-      },
-    });
-    upload.on("httpUploadProgress", (progress) => {
-      console.log(progress);
-    });
-    await upload.done();
+    //Upload file to S3
+    const S3_UPLOAD_RESULT = await S3_HELPER.UPLOAD_FILE(
+      USER_ID,
+      FILE.filename,
+      FILE.content
+    );
+    const S3_FILE_URL = S3_HELPER.GET_S3_URL_FOR_FILE(USER_ID, FILE.filename);
+    const REKOGNITION_RESULT = await REKOGNITION_HELPER.GET_LABELS(S3_FILE_URL);
+    console.log("Labels for image", REKOGNITION_RESULT);
     //Create record in dynamo
-    await createRecordInDynamo(USER_ID, FILE, response);
+    const INSERT_RECORD_RESULT = await REPOSITORY.INSERT_RECORD(
+      USER_ID,
+      FILE.filename,
+      REKOGNITION_RESULT
+    );
+    console.log("Created Item", RESULT);
+    RESPONSE = await UTILS.CREATE_RESPONSE(
+      INSERT_RECORD_RESULT,
+      "SUCCESS",
+      200
+    );
   } catch (error) {
     console.error("Failed to get record");
     console.error(error);
-    response.statusCode = 500;
-    response.body = JSON.stringify({
-      message: "Failed to get record",
+    const ERROR = {
       errorMessage: error.message,
       errorStack: error.stack,
-    });
+    };
+
+    RESPONSE = await UTILS.CREATE_RESPONSE(ERROR, "ERROR", 500);
   }
 
-  return response;
+  return RESPONSE;
 };
 
 const createUserBucketIfNotExist = async (event) => {
   const USER_ID = event.pathParameters.userId;
-  let response = { statusCode: 200 };
-  let DOES_BUCKET_EXISTS;
+  let RESPONSE;
   try {
-    await S3_HELPER.send(new HeadBucketCommand({ Bucket: USER_ID }));
+    const RESULT = await S3_HELPER.CREATE_BUCKET_IF_NOT_EXISTS(USER_ID);
+    switch (RESULT) {
+      case 200:
+        RESPONSE = await UTILS.CREATE_RESPONSE(
+          {},
+          "Bucket created successfully",
+          201
+        );
+        break;
+      case 403:
+        RESPONSE = await UTILS.CREATE_RESPONSE(
+          {},
+          "You are not authorized to access this resource",
+          403
+        );
+        break;
+      default:
+        RESPONSE = await UTILS.CREATE_RESPONSE(
+          {},
+          "You are not authorized to access this resource",
+          500
+        );
+    }
   } catch (error) {
     console.error("ERROR", error);
-    DOES_BUCKET_EXISTS = error.$metadata;
-  } finally {
-    if (DOES_BUCKET_EXISTS.httpStatusCode == 403) {
-      response.statusCode = DOES_BUCKET_EXISTS.httpStatusCode;
-      response.body = JSON.stringify({
-        message: "You do not have access permission to view this resource",
-        errorMessage: "Unauthorized",
-        errorStack: DOES_BUCKET_EXISTS.errorStack,
-      });
-      return response;
-    }
+    console.error(error);
+    const ERROR = {
+      errorMessage: error.message,
+      errorStack: error.stack,
+    };
 
-    if (DOES_BUCKET_EXISTS.httpStatusCode == 404) {
-      const CREATE_BUCKET_RESULT = await S3_HELPER.send(
-        new CreateBucketCommand({
-          Bucket: USER_ID,
-          CreateBucketConfiguration: { LocationConstraint: "ap-southeast-2" },
-          ServerSideEncryption: "AES256",
-        })
-      );
-
-      if (CREATE_BUCKET_RESULT.$metadata.httpStatusCode == 200) {
-        response.statusCode = CREATE_BUCKET_RESULT.$metadata.httpStatusCode;
-        response.body = JSON.stringify({
-          message: "Bucket created successfully",
-          data: {},
-        });
-      }
-      console.log("CREATED", CREATE_BUCKET_RESULT);
-    }
+    RESPONSE = await UTILS.CREATE_RESPONSE(ERROR, "ERROR", 500);
   }
-  return response;
+  return RESPONSE;
 };
-async function createRecordInDynamo(USER_ID, FILE, response) {
-  const DYNAMO_DB_PARAMS = {
-    TableName: process.env.DYNAMO_DB_TABLE_NAME,
-    Item: marshall({
-      userId: USER_ID,
-      s3Url: `https://${USER_ID}.s3.ap-souteast-2.amazonaws.com/${FILE.fileName}`,
-    }),
-  };
-
-  const createResult = await DB_HELPER.send(
-    new PutItemCommand(DYNAMO_DB_PARAMS)
-  );
-  console.log("Created Item", Item);
-
-  response.body = JSON.stringify({
-    message: "Successfully created user files",
-    data: unmarshall(createResult),
-    rawData: createResult,
-  });
-}
 
 module.exports = {
   getUserFiles,

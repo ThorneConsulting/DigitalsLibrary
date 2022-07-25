@@ -38,7 +38,7 @@ functions:
     handler: api.uploadUserFile
     name: upload-user-file
     memorySize: 256 # MB
-    timeout: 20 # seconds
+    timeout: 300 # seconds
     events:
       - http:
           path: /users/{userId}/file
