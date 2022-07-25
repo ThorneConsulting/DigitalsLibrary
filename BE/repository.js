@@ -26,7 +26,7 @@ const INSERT_RECORD = async (userId, fileName, fileMetaData) => {
       userId: userId,
       fileName: fileName,
       fileMetaData: fileMetaData,
-      s3Url: S3_HELPER.GET_S3_URL_FOR_FILE(userId, fileName),
+      s3Url: await S3_HELPER.GET_S3_URL_FOR_FILE(userId, fileName),
     }),
   };
 

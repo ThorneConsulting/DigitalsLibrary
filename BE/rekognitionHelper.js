@@ -17,6 +17,7 @@ const GET_LABELS = async (bucketName, fileName) => {
       MinConfidence: 80,
     })
   );
+  console.log(Labels);
   return Labels;
 };
 
