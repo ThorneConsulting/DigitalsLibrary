@@ -26,13 +26,15 @@ const INSERT_RECORD = async (userId, fileName, fileMetaData) => {
   if (Array.isArray(USER_RECORD.files)) {
     EXISTING_FILES = USER_RECORD.files;
   } else {
-    EXISTING_FILES = [
-      {
-        fileName: USER_RECORD.files.fileName,
-        fileMetaData: USER_RECORD.files.fileMetaData,
-        s3Url: USER_RECORD.files.s3Url,
-      },
-    ];
+    if (USER_RECORD?.files !== undefined) {
+      EXISTING_FILES = [
+        {
+          fileName: USER_RECORD.files.fileName,
+          fileMetaData: USER_RECORD.files.fileMetaData,
+          s3Url: USER_RECORD.files.s3Url,
+        },
+      ];
+    }
   }
   const FILES = [...EXISTING_FILES];
   FILES.push({
