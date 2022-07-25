@@ -24,8 +24,8 @@ const UPLOAD_FILE = async (bucketName, fileName, fileContent) => {
 const CREATE_BUCKET_IF_NOT_EXISTS = async (bucketName) => {
   let DOES_BUCKET_EXISTS;
   try {
-    const RESULT = await S3_HELPER.send(
-      new HeadBucketCommand({ Bucket: USER_ID })
+    const RESULT = await CLIENT.send(
+      new HeadBucketCommand({ Bucket: bucketName })
     );
     DOES_BUCKET_EXISTS = RESULT.$metadata;
     console.log("Found the bucket", DOES_BUCKET_EXISTS);

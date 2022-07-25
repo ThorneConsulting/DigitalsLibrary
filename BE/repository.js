@@ -2,6 +2,7 @@ const {
   DynamoDBClient,
   GetItemCommand,
   PutItemCommand,
+  UpdateItemCommand,
 } = require("@aws-sdk/client-dynamodb");
 const { marshall, unmarshall } = require("@aws-sdk/util-dynamodb");
 const S3_HELPER = require("./s3Helper");
@@ -35,7 +36,7 @@ const INSERT_RECORD = async (userId, fileName, fileMetaData) => {
   };
 
   const { ItemCollectionMetrics } = await CLIENT.send(
-    new PutItemCommand(PARAMS)
+    new UpdateItemCommand(PARAMS)
   );
   const RESULT = ItemCollectionMetrics ? unmarshall(ItemCollectionMetrics) : {};
   return RESULT;
