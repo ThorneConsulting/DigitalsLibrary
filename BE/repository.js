@@ -2,7 +2,6 @@ const {
   DynamoDBClient,
   GetItemCommand,
   PutItemCommand,
-  UpdateItemCommand,
 } = require("@aws-sdk/client-dynamodb");
 const { marshall, unmarshall } = require("@aws-sdk/util-dynamodb");
 const S3_HELPER = require("./s3Helper");
@@ -21,22 +20,23 @@ const GET_RECORD = async (userId) => {
 };
 
 const INSERT_RECORD = async (userId, fileName, fileMetaData) => {
+  const EXISTING_FILES = await GET_RECORD(userId)?.data.files;
+  const FILES = [...EXISTING_FILES];
+  FILES.push({
+    fileName: fileName,
+    fileMetaData: fileMetaData,
+    s3Url: await S3_HELPER.GET_S3_URL_FOR_FILE(userId, fileName),
+  });
   const PARAMS = {
     TableName: TABLE_NAME,
     Item: marshall({
       userId: userId,
-      files: [
-        {
-          fileName: fileName,
-          fileMetaData: fileMetaData,
-          s3Url: await S3_HELPER.GET_S3_URL_FOR_FILE(userId, fileName),
-        },
-      ],
+      files: FILES,
     }),
   };
 
   const { ItemCollectionMetrics } = await CLIENT.send(
-    new UpdateItemCommand(PARAMS)
+    new PutItemCommand(PARAMS)
   );
   const RESULT = ItemCollectionMetrics ? unmarshall(ItemCollectionMetrics) : {};
   return RESULT;
