@@ -30,8 +30,10 @@ const INSERT_RECORD = async (userId, fileName, fileMetaData) => {
     }),
   };
 
-  const PUT_ITEM_RESULT = await CLIENT.send(new PutItemCommand(PARAMS));
-  const RESULT = PUT_ITEM_RESULT ? unmarshall(PUT_ITEM_RESULT) : {};
+  const { ItemCollectionMetrics } = await CLIENT.send(
+    new PutItemCommand(PARAMS)
+  );
+  const RESULT = PUT_ITEM_RESULT ? unmarshall(ItemCollectionMetrics) : {};
   return RESULT;
 };
 

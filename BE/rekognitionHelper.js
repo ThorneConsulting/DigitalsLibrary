@@ -14,7 +14,7 @@ const GET_LABELS = async (bucketName, fileName) => {
         },
       },
       MaxLabels: 10,
-      MinConfidence: 80,
+      MinConfidence: 60,
     })
   );
   console.log(Labels);
