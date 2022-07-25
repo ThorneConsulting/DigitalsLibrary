@@ -54,7 +54,7 @@ const uploadUserFile = async (event) => {
       FILE.filename,
       REKOGNITION_RESULT
     );
-    console.log("Created Item", RESULT);
+    console.log("Created Item", INSERT_RECORD_RESULT);
     RESPONSE = await UTILS.CREATE_RESPONSE(
       INSERT_RECORD_RESULT,
       "SUCCESS",
