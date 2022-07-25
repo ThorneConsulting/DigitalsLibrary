@@ -21,7 +21,7 @@ const GET_RECORD = async (userId) => {
 
 const INSERT_RECORD = async (userId, fileName, fileMetaData) => {
   const USER_RECORD = await GET_RECORD(userId);
-  const EXISTING_FILES = USER_RECORD.files;
+  const EXISTING_FILES = Array.from(USER_RECORD.files);
   const FILES = [...EXISTING_FILES];
   FILES.push({
     fileName: fileName,
