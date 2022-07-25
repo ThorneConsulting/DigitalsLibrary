@@ -47,6 +47,7 @@ functions:
       - Effect: "Allow"
         Action:
           - "dynamoDB:PutItem"
+          - "dynamoDB:GetItem"
         Resource: !GetAtt MyDigitalsMetaDataTable.Arn
       - Effect: "Allow"
         Action:
