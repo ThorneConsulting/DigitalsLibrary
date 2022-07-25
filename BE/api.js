@@ -43,8 +43,10 @@ const uploadUserFile = async (event) => {
       FILE.filename,
       FILE.content
     );
-    const S3_FILE_URL = S3_HELPER.GET_S3_URL_FOR_FILE(USER_ID, FILE.filename);
-    const REKOGNITION_RESULT = await REKOGNITION_HELPER.GET_LABELS(S3_FILE_URL);
+    const REKOGNITION_RESULT = await REKOGNITION_HELPER.GET_LABELS(
+      USER_ID,
+      FILE.filename
+    );
     console.log("Labels for image", REKOGNITION_RESULT);
     //Create record in dynamo
     const INSERT_RECORD_RESULT = await REPOSITORY.INSERT_RECORD(
