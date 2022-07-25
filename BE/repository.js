@@ -24,9 +24,13 @@ const INSERT_RECORD = async (userId, fileName, fileMetaData) => {
     TableName: TABLE_NAME,
     Item: marshall({
       userId: userId,
-      fileName: fileName,
-      fileMetaData: fileMetaData,
-      s3Url: await S3_HELPER.GET_S3_URL_FOR_FILE(userId, fileName),
+      files: [
+        {
+          fileName: fileName,
+          fileMetaData: fileMetaData,
+          s3Url: await S3_HELPER.GET_S3_URL_FOR_FILE(userId, fileName),
+        },
+      ],
     }),
   };
 
