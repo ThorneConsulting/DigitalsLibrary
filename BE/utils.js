@@ -3,7 +3,7 @@ const CREATE_RESPONSE = async (data, message, statusCode) => {
     statusCode: statusCode,
     body: JSON.stringify({
       data: data,
-      message: message ? "SUCCESS" : message,
+      message: message,
     }),
   };
   return RESPONSE;

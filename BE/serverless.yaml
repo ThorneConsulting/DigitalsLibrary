@@ -51,8 +51,8 @@ functions:
       - Effect: "Allow"
         Action:
           - "s3:*"
-        Resource: "*" 
-        - Effect: "Allow"
+        Resource: "*"
+      - Effect: "Allow"
         Action:
           - "rekognition:DetectLabels"
         Resource: "*"
