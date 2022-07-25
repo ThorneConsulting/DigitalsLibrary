@@ -51,6 +51,10 @@ functions:
       - Effect: "Allow"
         Action:
           - "s3:*"
+        Resource: "*" 
+        - Effect: "Allow"
+        Action:
+          - "rekognition:DetectLabels"
         Resource: "*"
   deleteUserFile:
     handler: api.deleteUserFile
