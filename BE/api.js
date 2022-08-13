@@ -43,18 +43,19 @@ const uploadUserFile = async (event) => {
       FILE.filename,
       FILE.content
     );
-    const REKOGNITION_RESULT = await REKOGNITION_HELPER.GET_LABELS(
-      USER_ID,
-      FILE.filename
-    );
-    console.log("Labels for image", REKOGNITION_RESULT);
-    //Create record in dynamo
-    const INSERT_RECORD_RESULT = await REPOSITORY.INSERT_RECORD(
-      USER_ID,
-      FILE.filename,
-      REKOGNITION_RESULT
-    );
-    console.log("Created Item", INSERT_RECORD_RESULT);
+    console.log(S3_UPLOAD_RESULT.Key);
+    // const REKOGNITION_RESULT = await REKOGNITION_HELPER.GET_LABELS(
+    //   USER_ID,
+    //   FILE.filename
+    // );
+    // console.log("Labels for image", REKOGNITION_RESULT);
+    // //Create record in dynamo
+    // const INSERT_RECORD_RESULT = await REPOSITORY.INSERT_RECORD(
+    //   USER_ID,
+    //   FILE.filename,
+    //   REKOGNITION_RESULT
+    // );
+    // console.log("Created Item", INSERT_RECORD_RESULT);
     RESPONSE = await UTILS.CREATE_RESPONSE(
       INSERT_RECORD_RESULT,
       "SUCCESS",
