@@ -8,7 +8,7 @@ const UTILS = require("./utils");
 const CLIENT = new S3Client();
 
 const UPLOAD_FILE = async (bucketName, fileName, fileContent) => {
-  const FILE_PATH = CREATE_FILE_PATH(fileContent);
+  const FILE_PATH = await CREATE_FILE_PATH(fileContent);
   const FILE_NAME = FILE_PATH + fileName;
   const UPLOAD = new Upload({
     client: CLIENT,
