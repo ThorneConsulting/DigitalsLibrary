@@ -40,7 +40,7 @@ const uploadUserFile = async (event) => {
     const FILE = FORM_DATA.file;
     console.log("FORM_DATA", FORM_DATA);
     //Insert Hash record
-    const HASH = UTILS.GET_HASH(FILE.content);
+    const HASH = await UTILS.GET_HASH(FILE.content);
     const INSERT_HASH_RECORD_RESULT = await HASH_REPOSITORY.INSERT_RECORD(
       HASH,
       USER_ID
