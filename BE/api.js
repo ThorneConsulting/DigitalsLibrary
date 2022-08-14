@@ -1,7 +1,9 @@
-const REPOSITORY = require("./repository");
+const {
+  FILE_META_DATA_REPOSITORY,
+  HASH_REPOSITORY,
+} = require("./repositories");
 const UTILS = require("./utils");
-const S3_HELPER = require("./s3Helper");
-const REKOGNITION_HELPER = require("./rekognitionHelper");
+const { S3_HELPER, REKOGNITION_HELPER } = require("./helpers");
 const { parse } = require("aws-multipart-parser");
 
 const getUserFiles = async (event) => {
@@ -9,7 +11,7 @@ const getUserFiles = async (event) => {
   try {
     const USER_ID = event.pathParameters.userId;
 
-    const RESULT = await REPOSITORY.GET_RECORD(USER_ID);
+    const RESULT = await FILE_META_DATA_REPOSITORY.GET_RECORD(USER_ID);
 
     console.log("Found Item", RESULT);
 
@@ -37,25 +39,30 @@ const uploadUserFile = async (event) => {
     const FORM_DATA = parse(event, true);
     const FILE = FORM_DATA.file;
     console.log("FORM_DATA", FORM_DATA);
+    //Insert Hash record
+    const HASH = UTILS.GET_HASH(FILE.content);
+    const INSERT_HASH_RECORD_RESULT = await HASH_REPOSITORY.INSERT_RECORD(
+      HASH,
+      USER_ID
+    );
     //Upload file to S3
     const S3_UPLOAD_RESULT = await S3_HELPER.UPLOAD_FILE(
       USER_ID,
       FILE.filename,
       FILE.content
     );
-    console.log(S3_UPLOAD_RESULT.Key);
-    // const REKOGNITION_RESULT = await REKOGNITION_HELPER.GET_LABELS(
-    //   USER_ID,
-    //   FILE.filename
-    // );
-    // console.log("Labels for image", REKOGNITION_RESULT);
-    // //Create record in dynamo
-    // const INSERT_RECORD_RESULT = await REPOSITORY.INSERT_RECORD(
-    //   USER_ID,
-    //   FILE.filename,
-    //   REKOGNITION_RESULT
-    // );
-    // console.log("Created Item", INSERT_RECORD_RESULT);
+    const REKOGNITION_RESULT = await REKOGNITION_HELPER.GET_LABELS(
+      USER_ID,
+      FILE.filename
+    );
+    console.log("Labels for image", REKOGNITION_RESULT);
+    //Create record in dynamo
+    const INSERT_RECORD_RESULT = await FILE_META_DATA_REPOSITORY.INSERT_RECORD(
+      USER_ID,
+      FILE.filename,
+      REKOGNITION_RESULT
+    );
+    console.log("Created Item", INSERT_RECORD_RESULT);
     RESPONSE = await UTILS.CREATE_RESPONSE(
       INSERT_RECORD_RESULT,
       "SUCCESS",
@@ -98,8 +105,8 @@ const createUserBucketIfNotExist = async (event) => {
       default:
         RESPONSE = await UTILS.CREATE_RESPONSE(
           {},
-          "You are not authorized to access this resource",
-          500
+          "The request that was sent was malformed",
+          400
         );
     }
   } catch (error) {

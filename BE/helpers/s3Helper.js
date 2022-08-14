@@ -8,13 +8,11 @@ const UTILS = require("./utils");
 const CLIENT = new S3Client();
 
 const UPLOAD_FILE = async (bucketName, fileName, fileContent) => {
-  const FILE_PATH = await CREATE_FILE_PATH(fileContent);
-  const FILE_NAME = FILE_PATH + fileName;
   const UPLOAD = new Upload({
     client: CLIENT,
     params: {
       Bucket: bucketName,
-      Key: FILE_NAME,
+      Key: fileName,
       Body: fileContent,
     },
   });
@@ -55,20 +53,6 @@ const CREATE_BUCKET_IF_NOT_EXISTS = async (bucketName) => {
   }
 };
 
-const CREATE_FILE_PATH = async (fileContent) => {
-  const FOLDER_NAME_LENGTH = 12;
-  const HASH = await UTILS.GET_HASH(fileContent);
-  let filePath;
-  for (var index = 0; index < HASH.length; index += FOLDER_NAME_LENGTH) {
-    if (index !== HASH.length) {
-      if (filePath === undefined) {
-        filePath = HASH.slice(index, index + FOLDER_NAME_LENGTH) + "/";
-      }
-      filePath = filePath + HASH.slice(index, index + FOLDER_NAME_LENGTH) + "/";
-    }
-  }
-  return filePath;
-};
 const GET_S3_URL_FOR_FILE = async (bucketName, fileName) => {
   return `https://${bucketName}.s3.ap-southeast-2.amazonaws.com/${fileName}`;
 };

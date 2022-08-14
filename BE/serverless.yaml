@@ -8,10 +8,12 @@ provider:
   stage: dev
   region: ap-southeast-2
   environment:
-    DYNAMO_DB_TABLE_NAME: ${self:custom.myDigitalsMetaData}
+    DYNAMO_DB_FILE_META_DATA_TABLE_NAME: ${self:custom.fileMetaDataTable}
+    DYNAMO_DB_HASH_TABLE_NAME: ${self:custom.hashTable}
 
 custom:
-  myDigitalsMetaData: my-digitals-meta-data-${self:provider.stage}
+  fileMetaDataTable: file-meta-data-${self:provider.stage}
+  hashTable: hash-${self:provider.stage}
   apigwBinary:
     types: #list of mime-types
       - "multipart/form-data"
@@ -94,12 +96,25 @@ resources:
     MyDigitalsMetaDataTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:custom.myDigitalsMetaData}
+        TableName: ${self:custom.fileMetaDataTable}
         AttributeDefinitions:
           - AttributeName: userId
             AttributeType: S
         KeySchema:
           - AttributeName: userId
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    MyDigitalsHashable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.hashTable}
+        AttributeDefinitions:
+          - AttributeName: userFileHash
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userFileHash
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1
