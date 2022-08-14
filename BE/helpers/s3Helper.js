@@ -4,7 +4,6 @@ const {
   HeadBucketCommand,
 } = require("@aws-sdk/client-s3");
 const { Upload } = require("@aws-sdk/lib-storage");
-const UTILS = require("./utils");
 const CLIENT = new S3Client();
 
 const UPLOAD_FILE = async (bucketName, fileName, fileContent) => {
