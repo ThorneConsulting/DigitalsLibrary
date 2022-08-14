@@ -4,10 +4,10 @@ const {
   PutItemCommand,
 } = require("@aws-sdk/client-dynamodb");
 const { marshall, unmarshall } = require("@aws-sdk/util-dynamodb");
-const S3_HELPER = require("./s3Helper");
+const S3_HELPER = require("../helpers/s3Helper");
 
 const CLIENT = new DynamoDBClient({});
-const TABLE_NAME = process.env.DYNAMO_DB_TABLE_NAME;
+const TABLE_NAME = process.env.DYNAMO_DB_FILE_META_DATA_TABLE_NAME;
 
 const GET_RECORD = async (userId) => {
   const PARAMS = {
