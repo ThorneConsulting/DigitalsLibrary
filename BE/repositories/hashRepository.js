@@ -21,7 +21,7 @@ const GET_RECORD = async (userFileHash) => {
 const INSERT_RECORD = async (userFileHash, userId) => {
   const USER_FILE_HASH_RECORD = await GET_RECORD(userFileHash);
   console.log(USER_FILE_HASH_RECORD);
-  if (USER_FILE_HASH_RECORD !== undefined) {
+  if (USER_FILE_HASH_RECORD?.userFileHash === userFileHash) {
     throw new Error("Duplicate file being uploaded cannot insert file record");
   }
   const PARAMS = {
