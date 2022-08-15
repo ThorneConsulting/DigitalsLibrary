@@ -36,6 +36,10 @@ functions:
         Action:
           - "dynamoDB:GetItem"
         Resource: !GetAtt MyDigitalsMetaDataTable.Arn
+      - Effect: "Allow"
+        Action:
+          - "dynamoDB:GetItem"
+        Resource: !GetAtt MyDigitalsHashable.Arn
   uploadUserFile:
     handler: api.uploadUserFile
     name: upload-user-file
@@ -51,6 +55,11 @@ functions:
           - "dynamoDB:PutItem"
           - "dynamoDB:GetItem"
         Resource: !GetAtt MyDigitalsMetaDataTable.Arn
+      - Effect: "Allow"
+        Action:
+          - "dynamoDB:PutItem"
+          - "dynamoDB:GetItem"
+        Resource: !GetAtt MyDigitalsHashable.Arn
       - Effect: "Allow"
         Action:
           - "s3:*"
@@ -73,6 +82,10 @@ functions:
         Action:
           - "dynamoDB:DeleteItem"
         Resource: !GetAtt MyDigitalsMetaDataTable.Arn
+      - Effect: "Allow"
+        Action:
+          - "dynamoDB:DeleteItem"
+        Resource: !GetAtt MyDigitalsHashable.Arn
       - Effect: "Allow"
         Action:
           - "s3:*"
