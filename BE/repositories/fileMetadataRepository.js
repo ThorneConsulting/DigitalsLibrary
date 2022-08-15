@@ -19,7 +19,7 @@ const GET_RECORD = async (userId) => {
   return RESULT;
 };
 
-const INSERT_RECORD = async (userId, fileName, fileMetaData) => {
+const INSERT_RECORD = async (userId, fileName, tags) => {
   const USER_RECORD = await GET_RECORD(userId);
   console.log(JSON.stringify(USER_RECORD));
   let EXISTING_FILES = [];
@@ -30,7 +30,7 @@ const INSERT_RECORD = async (userId, fileName, fileMetaData) => {
       EXISTING_FILES = [
         {
           fileName: USER_RECORD.files.fileName,
-          fileMetaData: USER_RECORD.files.fileMetaData,
+          tags: USER_RECORD.files.tags,
           s3Url: USER_RECORD.files.s3Url,
         },
       ];
@@ -39,7 +39,7 @@ const INSERT_RECORD = async (userId, fileName, fileMetaData) => {
   const FILES = [...EXISTING_FILES];
   FILES.push({
     fileName: fileName,
-    fileMetaData: fileMetaData,
+    tags: tags,
     s3Url: await S3_HELPER.GET_S3_URL_FOR_FILE(userId, fileName),
   });
   const PARAMS = {

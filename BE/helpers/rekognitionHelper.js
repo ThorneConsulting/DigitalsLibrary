@@ -17,7 +17,8 @@ const GET_LABELS = async (bucketName, fileName) => {
       MinConfidence: 60,
     })
   );
-  return Labels;
+  const labelNames = Labels.map((label) => label.Name);
+  return labelNames;
 };
 
 module.exports = {

@@ -51,16 +51,16 @@ const uploadUserFile = async (event) => {
       FILE.filename,
       FILE.content
     );
-    const REKOGNITION_RESULT = await REKOGNITION_HELPER.GET_LABELS(
+    const IMAGE_LABELS = await REKOGNITION_HELPER.GET_LABELS(
       USER_ID,
       FILE.filename
     );
-    console.log("Labels for image", REKOGNITION_RESULT);
+    console.log("Labels for image", IMAGE_LABELS);
     //Create record in dynamo
     const INSERT_RECORD_RESULT = await FILE_META_DATA_REPOSITORY.INSERT_RECORD(
       USER_ID,
       FILE.filename,
-      REKOGNITION_RESULT
+      IMAGE_LABELS
     );
     console.log("Created Item", INSERT_RECORD_RESULT);
     RESPONSE = await UTILS.CREATE_RESPONSE(
