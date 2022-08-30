@@ -132,3 +132,59 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+    UserPool:
+      Type: AWS::Cognito::UserPool
+      Properties:
+        UserPoolName: my-digitals
+        Schema:
+          - Name: email
+            Required: true
+            Mutable: true
+          - Name: phone
+            Required: true
+            Mutable: true
+          - Name: address
+            Required: true
+            Mutable: true
+          - Name: firstName
+            Required: true
+            Mutable: true
+          - Name: firstName
+            Required: true
+            Mutable: true
+        Policies:
+          PasswordPolicy:
+            MinimumLength: 8
+            RequireLowercase: true
+            RequireNumbers: true
+            RequireSymbols: true
+            RequireUppercase: true
+        AutoVerifiedAttributes: ["email"]
+    UserClient:
+      Type: AWS::Cognito::UserPoolClient
+      Properties:
+        ClientName: my-digitals
+        GenerateSecret: true
+        UserPoolId: !Ref UserPool
+        AccessTokenValidity: 60
+        IdTokenValidity: 60
+        RefreshTokenValidity: 30
+        AllowedOAuthFlowsUserPoolClient: true
+      CallbackURLs:
+        - http://example.com
+      LogoutURLs:
+        - http://example.com
+      AllowedOAuthFlows:
+        - code
+        - implicit
+      AllowedOAuthScopes:
+        - phone
+        - email
+        - openid
+        - profile
+      SupportedIdentityProviders:
+        - COGNITO
+      ExplicitAuthFlows:
+        - "ALLOW_CUSTOM_AUTH"
+        - "ALLOW_REFRESH_TOKEN_AUTH"
+        - "ALLOW_USER_SRP_AUTH"
