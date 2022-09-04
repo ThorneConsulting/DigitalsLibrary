@@ -140,16 +140,16 @@ resources:
           - Name: email
             Required: true
             Mutable: true
-          - Name: phone
+          - Name: phone_number
             Required: true
             Mutable: true
           - Name: address
             Required: true
             Mutable: true
-          - Name: firstName
+          - Name: first_name
             Required: true
             Mutable: true
-          - Name: firstName
+          - Name: last_name
             Required: true
             Mutable: true
         Policies:
@@ -159,7 +159,7 @@ resources:
             RequireNumbers: true
             RequireSymbols: true
             RequireUppercase: true
-        AutoVerifiedAttributes: ["email", "phone"]
+        AutoVerifiedAttributes: ["email", "phone_number"]
     UserClient:
       Type: AWS::Cognito::UserPoolClient
       Properties:
