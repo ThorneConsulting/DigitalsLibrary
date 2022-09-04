@@ -159,7 +159,7 @@ resources:
             RequireNumbers: true
             RequireSymbols: true
             RequireUppercase: true
-        AutoVerifiedAttributes: ["email"]
+        AutoVerifiedAttributes: ["email", "phone"]
     UserClient:
       Type: AWS::Cognito::UserPoolClient
       Properties:
@@ -180,8 +180,6 @@ resources:
         AllowedOAuthScopes:
           - phone
           - email
-          - openid
-          - profile
         SupportedIdentityProviders:
           - COGNITO
         ExplicitAuthFlows:
