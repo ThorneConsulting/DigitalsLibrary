@@ -146,10 +146,13 @@ resources:
           - Name: address
             Required: true
             Mutable: true
-          - Name: first_name
+          - Name: given_name
             Required: true
             Mutable: true
-          - Name: last_name
+          - Name: family_name
+            Required: true
+            Mutable: true
+          - Name: birthdate
             Required: true
             Mutable: true
         Policies:
