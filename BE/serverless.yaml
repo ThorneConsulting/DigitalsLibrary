@@ -174,9 +174,9 @@ resources:
         RefreshTokenValidity: 1
         AllowedOAuthFlowsUserPoolClient: true
         CallbackURLs:
-          - http://example.com
+          - https://example.com
         LogoutURLs:
-          - http://example.com
+          - https://example.com
         AllowedOAuthFlows:
           - code
           - implicit
