@@ -169,13 +169,9 @@ resources:
         ClientName: my-digitals
         GenerateSecret: true
         UserPoolId: !Ref UserPool
-        AccessTokenValidity: 60
-        IdTokenValidity: 60
-        RefreshTokenValidity: 30
-        TokenValidityUnits:
-          AccessToken: "minutes"
-          IdToken: "minutes"
-          RefreshToken: "minutes"
+        AccessTokenValidity: 1
+        IdTokenValidity: 1
+        RefreshTokenValidity: 1
         AllowedOAuthFlowsUserPoolClient: true
         CallbackURLs:
           - http://example.com
