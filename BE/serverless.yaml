@@ -44,7 +44,7 @@ functions:
     handler: api.uploadUserFile
     name: upload-user-file
     memorySize: 256 # MB
-    timeout: 300 # seconds
+    timeout: 30 # seconds
     events:
       - http:
           path: /users/{userId}/file
@@ -170,11 +170,11 @@ resources:
         GenerateSecret: true
         UserPoolId: !Ref UserPool
         AccessTokenValidity: 60
-        IdTokenValidity: 1
+        IdTokenValidity: 60
         RefreshTokenValidity: 30
         TokenValidityUnits:
           AccessToken: "minutes"
-          IdToken: "days"
+          IdToken: "minutes"
           RefreshToken: "minutes"
         AllowedOAuthFlowsUserPoolClient: true
         CallbackURLs:
