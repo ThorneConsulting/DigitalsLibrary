@@ -181,7 +181,6 @@ resources:
           - code
           - implicit
         AllowedOAuthScopes:
-          - phone
           - email
         SupportedIdentityProviders:
           - COGNITO
