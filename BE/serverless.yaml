@@ -162,7 +162,8 @@ resources:
             RequireNumbers: true
             RequireSymbols: true
             RequireUppercase: true
-        AutoVerifiedAttributes: ["email"]
+        AutoVerifiedAttributes:
+          - email
     UserClient:
       Type: AWS::Cognito::UserPoolClient
       Properties:
