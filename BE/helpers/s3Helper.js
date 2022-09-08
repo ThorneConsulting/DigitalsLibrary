@@ -34,7 +34,7 @@ const CREATE_BUCKET_IF_NOT_EXISTS = async (bucketName) => {
     DOES_BUCKET_EXISTS = error.$metadata;
   } finally {
     if (DOES_BUCKET_EXISTS.httpStatusCode == 404) {
-      const CREATE_BUCKET_RESULT = await S3_HELPER.send(
+      const CREATE_BUCKET_RESULT = await CLIENT.send(
         new CreateBucketCommand({
           Bucket: USER_ID,
           CreateBucketConfiguration: { LocationConstraint: "ap-southeast-2" },
