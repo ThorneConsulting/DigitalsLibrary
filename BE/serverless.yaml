@@ -1,5 +1,6 @@
 #org: vibhavdeo
 #app: my-digitals-api
+#The reason for hardcoding the arn of userpool is an open issue https://github.com/serverless/serverless/issues/3212#issuecomment-307341924
 service: my-digitals-api
 
 provider:
@@ -32,7 +33,7 @@ functions:
           path: /users/{userId}/files
           method: GET
           authorizer:
-            arn: !GetAtt UserPool.Arn
+            arn: arn:aws:cognito-idp:ap-southeast-2:137481829477:userpool/ap-southeast-2_YVSpAqxya
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -52,7 +53,7 @@ functions:
           path: /users/{userId}/file
           method: POST
           authorizer:
-            arn: !GetAtt UserPool.Arn
+            arn: arn:aws:cognito-idp:ap-southeast-2:137481829477:userpool/ap-southeast-2_YVSpAqxya
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -82,7 +83,7 @@ functions:
           path: /users/{userId}/file
           method: DELETE
           authorizer:
-            arn: !GetAtt UserPool.Arn
+            arn: arn:aws:cognito-idp:ap-southeast-2:137481829477:userpool/ap-southeast-2_YVSpAqxya
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -106,7 +107,7 @@ functions:
           path: /users/{userId}/create-user-bucket
           method: POST
           authorizer:
-            arn: !GetAtt UserPool.Arn
+            arn: arn:aws:cognito-idp:ap-southeast-2:137481829477:userpool/ap-southeast-2_YVSpAqxya
     iamRoleStatements:
       - Effect: "Allow"
         Action:
