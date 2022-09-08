@@ -183,6 +183,7 @@ resources:
           - implicit
         AllowedOAuthScopes:
           - email
+          - openid
         SupportedIdentityProviders:
           - COGNITO
         ExplicitAuthFlows:
