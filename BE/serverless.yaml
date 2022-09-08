@@ -31,6 +31,8 @@ functions:
       - http:
           path: /users/{userId}/files
           method: GET
+          authorizer:
+            arn: !GetAtt UserPool.Arn
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -49,6 +51,8 @@ functions:
       - http:
           path: /users/{userId}/file
           method: POST
+          authorizer:
+            arn: !GetAtt UserPool.Arn
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -77,6 +81,8 @@ functions:
       - http:
           path: /users/{userId}/file
           method: DELETE
+          authorizer:
+            arn: !GetAtt UserPool.Arn
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -99,6 +105,8 @@ functions:
       - http:
           path: /users/{userId}/create-user-bucket
           method: POST
+          authorizer:
+            arn: !GetAtt UserPool.Arn
     iamRoleStatements:
       - Effect: "Allow"
         Action:
