@@ -1,10 +1,10 @@
-const {
+import {
   RekognitionClient,
   DetectLabelsCommand,
-} = require("@aws-sdk/client-rekognition");
+} from "@aws-sdk/client-rekognition";
 const CLIENT = new RekognitionClient({ region: "ap-southeast-2" });
 
-const GET_LABELS = async (bucketName, fileName) => {
+export const GET_LABELS = async (bucketName: string, fileName: string) => {
   const { Labels } = await CLIENT.send(
     new DetectLabelsCommand({
       Image: {
@@ -17,10 +17,6 @@ const GET_LABELS = async (bucketName, fileName) => {
       MinConfidence: 60,
     })
   );
-  const labelNames = Labels.map((label) => label.Name);
+  const labelNames = Labels?.map((label) => label.Name);
   return labelNames;
-};
-
-module.exports = {
-  GET_LABELS: GET_LABELS,
 };

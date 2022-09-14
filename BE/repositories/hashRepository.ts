@@ -8,7 +8,7 @@ const { marshall, unmarshall } = require("@aws-sdk/util-dynamodb");
 const CLIENT = new DynamoDBClient({});
 const TABLE_NAME = process.env.DYNAMO_DB_HASH_TABLE_NAME;
 
-const GET_RECORD = async (userFileHash) => {
+export const GET_FILE_HASH_RECORD = async (userFileHash: string) => {
   const PARAMS = {
     TableName: TABLE_NAME,
     Key: marshall({ userFileHash: userFileHash }),
@@ -18,8 +18,11 @@ const GET_RECORD = async (userFileHash) => {
   return RESULT;
 };
 
-const INSERT_RECORD = async (userFileHash, userId) => {
-  const USER_FILE_HASH_RECORD = await GET_RECORD(userFileHash);
+export const INSERT_FILE_HASH_RECORD = async (
+  userFileHash: string,
+  userId: string
+) => {
+  const USER_FILE_HASH_RECORD = await GET_FILE_HASH_RECORD(userFileHash);
   console.log(USER_FILE_HASH_RECORD);
   if (USER_FILE_HASH_RECORD?.userFileHash === userFileHash) {
     throw new Error("Duplicate file being uploaded cannot insert file record");
@@ -32,14 +35,7 @@ const INSERT_RECORD = async (userFileHash, userId) => {
     }),
   };
 
-  const { ItemCollectionMetrics } = await CLIENT.send(
-    new PutItemCommand(PARAMS)
-  );
-  const RESULT = ItemCollectionMetrics ? unmarshall(ItemCollectionMetrics) : {};
+  const { Attributes } = await CLIENT.send(new PutItemCommand(PARAMS));
+  const RESULT = Attributes ? unmarshall(Attributes) : {};
   return RESULT;
-};
-
-module.exports = {
-  GET_RECORD: GET_RECORD,
-  INSERT_RECORD: INSERT_RECORD,
 };

@@ -1,12 +1,17 @@
-const {
+import {
   S3Client,
   CreateBucketCommand,
   HeadBucketCommand,
-} = require("@aws-sdk/client-s3");
-const { Upload } = require("@aws-sdk/lib-storage");
-const CLIENT = new S3Client();
+  CreateBucketCommandInput,
+} from "@aws-sdk/client-s3";
+import { Upload } from "@aws-sdk/lib-storage";
+const CLIENT = new S3Client({});
 
-const UPLOAD_FILE = async (bucketName, fileName, fileContent) => {
+export const UPLOAD_FILE = async (
+  bucketName: string,
+  fileName: string,
+  fileContent: Buffer | string
+) => {
   const UPLOAD = new Upload({
     client: CLIENT,
     params: {
@@ -21,7 +26,7 @@ const UPLOAD_FILE = async (bucketName, fileName, fileContent) => {
   return await UPLOAD.done();
 };
 
-const CREATE_BUCKET_IF_NOT_EXISTS = async (bucketName) => {
+export const CREATE_BUCKET_IF_NOT_EXISTS = async (bucketName: string) => {
   let DOES_BUCKET_EXISTS;
   try {
     const RESULT = await CLIENT.send(
@@ -29,17 +34,17 @@ const CREATE_BUCKET_IF_NOT_EXISTS = async (bucketName) => {
     );
     DOES_BUCKET_EXISTS = RESULT.$metadata;
     console.log("Found the bucket", DOES_BUCKET_EXISTS);
-  } catch (error) {
+  } catch (error: any) {
     console.error("ERROR", error);
     DOES_BUCKET_EXISTS = error.$metadata;
   } finally {
     if (DOES_BUCKET_EXISTS.httpStatusCode == 404) {
       const CREATE_BUCKET_RESULT = await CLIENT.send(
         new CreateBucketCommand({
-          Bucket: USER_ID,
+          Bucket: bucketName,
           CreateBucketConfiguration: { LocationConstraint: "ap-southeast-2" },
           ServerSideEncryption: "AES256",
-        })
+        } as CreateBucketCommandInput)
       );
 
       if (CREATE_BUCKET_RESULT.$metadata.httpStatusCode == 200) {
@@ -52,11 +57,9 @@ const CREATE_BUCKET_IF_NOT_EXISTS = async (bucketName) => {
   }
 };
 
-const GET_S3_URL_FOR_FILE = async (bucketName, fileName) => {
+export const GET_S3_URL_FOR_FILE = async (
+  bucketName: string,
+  fileName: string
+) => {
   return `https://${bucketName}.s3.ap-southeast-2.amazonaws.com/${fileName}`;
-};
-module.exports = {
-  UPLOAD_FILE: UPLOAD_FILE,
-  CREATE_BUCKET_IF_NOT_EXISTS: CREATE_BUCKET_IF_NOT_EXISTS,
-  GET_S3_URL_FOR_FILE: GET_S3_URL_FOR_FILE,
 };
