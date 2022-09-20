@@ -12,7 +12,7 @@ export const CREATE_RESPONSE = async (
       message: message,
     },
   } as ApiResponse;
-  return RESPONSE;
+  return JSON.stringify(RESPONSE);
 };
 
 export const GET_HASH = async (data: string | Buffer) => {
