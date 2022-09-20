@@ -20,6 +20,7 @@ custom:
       - "multipart/form-data"
 
 plugins:
+  - serverless-plugin-typescript
   - serverless-apigw-binary
   - serverless-iam-roles-per-function
 functions:
