@@ -13,6 +13,7 @@ export const getUserFiles = async (event: APIGatewayEvent) => {
     console.log("Found Item", RESULT);
 
     RESPONSE = await CREATE_RESPONSE(RESULT, "SUCCESS", 200);
+    console.log(RESPONSE);
   } catch (error: any) {
     console.error("Failed to get record");
 
