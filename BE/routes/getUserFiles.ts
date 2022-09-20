@@ -3,6 +3,7 @@ import { GET_USER_FILE_RECORD } from "../repositories";
 import { CREATE_RESPONSE } from "../utils";
 export const getUserFiles = async (event: APIGatewayEvent) => {
   const USER_ID = event.pathParameters?.userId;
+  console.log(event.headers);
   if (USER_ID == undefined) {
     return await CREATE_RESPONSE({}, "Invalid UserId", 400);
   }
