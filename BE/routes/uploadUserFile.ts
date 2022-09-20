@@ -6,14 +6,13 @@ import { CREATE_RESPONSE, GET_HASH } from "../utils";
 import { UPLOAD_FILE, GET_LABELS } from "../helpers";
 import { parse } from "aws-multipart-parser";
 import { FileData } from "aws-multipart-parser/dist/models";
-import { ApiResponse } from "../models";
 import { APIGatewayEvent } from "aws-lambda";
 export const uploadUserFile = async (event: APIGatewayEvent) => {
   const USER_ID = event.pathParameters?.userId;
   if (USER_ID == undefined) {
     return await CREATE_RESPONSE({}, "Invalid UserId", 400);
   }
-  let RESPONSE: ApiResponse;
+  let RESPONSE;
   try {
     const FORM_DATA = parse(event, true);
     const FILE = FORM_DATA.file as FileData;

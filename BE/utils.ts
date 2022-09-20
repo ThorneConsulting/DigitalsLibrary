@@ -7,12 +7,12 @@ export const CREATE_RESPONSE = async (
 ) => {
   const RESPONSE = {
     statusCode: statusCode,
-    body: {
+    body: JSON.stringify({
       data: data,
       message: message,
-    },
-  } as ApiResponse;
-  return JSON.stringify(RESPONSE);
+    }),
+  };
+  return RESPONSE;
 };
 
 export const GET_HASH = async (data: string | Buffer) => {
