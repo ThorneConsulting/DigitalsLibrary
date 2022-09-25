@@ -4,12 +4,12 @@ import {
   PutItemCommand,
 } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
-import { GET_S3_URL_FOR_FILE } from "../helpers";
+import { getS3UrlForFileAsync } from "../helpers";
 import { DynamoRecord } from "../models";
 const CLIENT = new DynamoDBClient({});
 const TABLE_NAME = process.env.DYNAMO_DB_FILE_META_DATA_TABLE_NAME;
 
-export const GET_USER_FILE_RECORD = async (userId: string) => {
+export const getUserFileRecordAsync = async (userId: string) => {
   const PARAMS = {
     TableName: TABLE_NAME,
     Key: marshall({ userId: userId }),
@@ -19,12 +19,12 @@ export const GET_USER_FILE_RECORD = async (userId: string) => {
   return RESULT;
 };
 
-export const INSERT_USER_FILE_RECORD = async (
+export const insertUserFileRecordAsync = async (
   userId: string,
   fileName: string,
   tags: (string | undefined)[] | undefined
 ) => {
-  const USER_RECORD = await GET_USER_FILE_RECORD(userId);
+  const USER_RECORD = await getUserFileRecordAsync(userId);
   console.log(JSON.stringify(USER_RECORD));
   let EXISTING_FILES: DynamoRecord[] = [];
   if (Array.isArray(USER_RECORD.files)) {
@@ -44,7 +44,7 @@ export const INSERT_USER_FILE_RECORD = async (
   FILES.push({
     fileName: fileName,
     tags: tags,
-    s3Url: await GET_S3_URL_FOR_FILE(userId, fileName),
+    s3Url: await getS3UrlForFileAsync(userId, fileName),
   });
   const PARAMS = {
     TableName: TABLE_NAME,

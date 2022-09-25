@@ -4,7 +4,7 @@ import {
 } from "@aws-sdk/client-rekognition";
 const CLIENT = new RekognitionClient({ region: "ap-southeast-2" });
 
-export const GET_LABELS = async (bucketName: string, fileName: string) => {
+export const getLabelsAsync = async (bucketName: string, fileName: string) => {
   const { Labels } = await CLIENT.send(
     new DetectLabelsCommand({
       Image: {

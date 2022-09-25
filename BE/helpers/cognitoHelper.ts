@@ -1,13 +1,23 @@
 import { CognitoJwtVerifier } from "aws-jwt-verify";
+import { COGNITO } from "../config";
 
-export const VERIFY_VALID_USER_ID = async (
+export const verifyValidUserIdAsync = async (
   authToken: string,
-  userId: string
+  userId?: string
 ) => {
+  if (!!userId) {
+    return false;
+  }
+  if (COGNITO.userPoolId === undefined || COGNITO.clientId === undefined) {
+    console.log("Userpool id or Client id undefined");
+    console.warn("Userpool id", COGNITO.userPoolId);
+    console.warn("Client id", COGNITO.clientId);
+    return false;
+  }
   const verifier = CognitoJwtVerifier.create({
-    userPoolId: "ap-southeast-2_YVSpAqxya",
+    userPoolId: COGNITO.userPoolId,
     tokenUse: "id",
-    clientId: "1geodasbkgprokukl0fmo12dei",
+    clientId: COGNITO.clientId,
   });
   const payload = await verifier.verify(
     authToken // the JWT as string

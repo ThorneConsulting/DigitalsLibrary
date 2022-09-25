@@ -1,35 +1,40 @@
-import { CREATE_RESPONSE } from "../utils";
-import { CREATE_BUCKET_IF_NOT_EXISTS } from "../helpers";
+import { applyCommonValidationsAsync, createResponseAsync } from "../utils";
+import {
+  createBUcketIfNotExistsAsync,
+  verifyValidUserIdAsync,
+} from "../helpers";
 import { APIGatewayEvent } from "aws-lambda";
-export const createUserBucketIfNotExist = async (event: APIGatewayEvent) => {
-  const USER_ID = event.pathParameters?.userId;
-  if (USER_ID == undefined) {
-    return await CREATE_RESPONSE({}, "Invalid UserId", 400);
+import {
+  BAD_REQUEST,
+  FORBIDDEN,
+  GENERIC_ERROR,
+  GENERIC_SUCCESS,
+} from "../config";
+export const createUserBucketIfNotExistAsync = async (
+  event: APIGatewayEvent
+) => {
+  const VALIDATION_RESULT = await applyCommonValidationsAsync(event);
+  if (VALIDATION_RESULT.statusCode !== 200) {
+    return VALIDATION_RESULT;
   }
+  const USER_ID = event.pathParameters?.userId;
+
+  if (USER_ID == undefined) {
+    return await createResponseAsync({}, BAD_REQUEST, "Invalid UserId");
+  }
+
   let RESPONSE;
   try {
-    const RESULT = await CREATE_BUCKET_IF_NOT_EXISTS(USER_ID);
+    const RESULT = await createBUcketIfNotExistsAsync(USER_ID);
     switch (RESULT) {
       case 200:
-        RESPONSE = await CREATE_RESPONSE(
-          {},
-          "Bucket created successfully",
-          201
-        );
+        RESPONSE = await createResponseAsync({}, GENERIC_SUCCESS);
         break;
       case 403:
-        RESPONSE = await CREATE_RESPONSE(
-          {},
-          "You are not authorized to access this resource",
-          403
-        );
+        RESPONSE = await createResponseAsync({}, FORBIDDEN);
         break;
       default:
-        RESPONSE = await CREATE_RESPONSE(
-          {},
-          "The request that was sent was malformed",
-          400
-        );
+        RESPONSE = await createResponseAsync({}, BAD_REQUEST);
     }
   } catch (error: any) {
     console.error("ERROR", error);
@@ -39,7 +44,7 @@ export const createUserBucketIfNotExist = async (event: APIGatewayEvent) => {
       errorStack: error.stack,
     };
 
-    RESPONSE = await CREATE_RESPONSE(ERROR, "ERROR", 500);
+    RESPONSE = await createResponseAsync(ERROR, GENERIC_ERROR);
   }
   return RESPONSE;
 };

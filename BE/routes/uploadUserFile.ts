@@ -1,16 +1,26 @@
 import {
-  INSERT_FILE_HASH_RECORD,
-  INSERT_USER_FILE_RECORD,
+  insertFileHashRecordAsync,
+  insertUserFileRecordAsync,
 } from "../repositories";
-import { CREATE_RESPONSE, GET_HASH } from "../utils";
-import { UPLOAD_FILE, GET_LABELS } from "../helpers";
+import {
+  applyCommonValidationsAsync,
+  createResponseAsync,
+  getHashAsync,
+} from "../utils";
+import { uploadFileAsync, getLabelsAsync } from "../helpers";
 import { parse } from "aws-multipart-parser";
 import { FileData } from "aws-multipart-parser/dist/models";
 import { APIGatewayEvent } from "aws-lambda";
-export const uploadUserFile = async (event: APIGatewayEvent) => {
+import { BAD_REQUEST, GENERIC_ERROR, GENERIC_SUCCESS } from "../config";
+export const uploadUserFileAsync = async (event: APIGatewayEvent) => {
+  const VALIDATION_RESULT = await applyCommonValidationsAsync(event);
+  if (VALIDATION_RESULT.statusCode !== 200) {
+    return VALIDATION_RESULT;
+  }
   const USER_ID = event.pathParameters?.userId;
+
   if (USER_ID == undefined) {
-    return await CREATE_RESPONSE({}, "Invalid UserId", 400);
+    return await createResponseAsync({}, BAD_REQUEST, "Invalid UserId");
   }
   let RESPONSE;
   try {
@@ -18,27 +28,27 @@ export const uploadUserFile = async (event: APIGatewayEvent) => {
     const FILE = FORM_DATA.file as FileData;
     console.log("FORM_DATA", FORM_DATA);
     //Insert Hash record
-    const HASH = await GET_HASH(FILE.content);
-    const INSERT_HASH_RECORD_RESULT = await INSERT_FILE_HASH_RECORD(
+    const HASH = await getHashAsync(FILE.content);
+    const INSERT_HASH_RECORD_RESULT = await insertFileHashRecordAsync(
       HASH,
       USER_ID
     );
     //Upload file to S3
-    const S3_UPLOAD_RESULT = await UPLOAD_FILE(
+    const S3_UPLOAD_RESULT = await uploadFileAsync(
       USER_ID,
       FILE.filename,
       FILE.content
     );
-    const IMAGE_LABELS = await GET_LABELS(USER_ID, FILE.filename);
+    const IMAGE_LABELS = await getLabelsAsync(USER_ID, FILE.filename);
     console.log("Labels for image", IMAGE_LABELS);
     //Create record in dynamo
-    const INSERT_RECORD_RESULT = await INSERT_USER_FILE_RECORD(
+    const INSERT_RECORD_RESULT = await insertUserFileRecordAsync(
       USER_ID,
       FILE.filename,
       IMAGE_LABELS
     );
     console.log("Created Item", INSERT_RECORD_RESULT);
-    RESPONSE = await CREATE_RESPONSE(INSERT_RECORD_RESULT, "SUCCESS", 200);
+    RESPONSE = await createResponseAsync(INSERT_RECORD_RESULT, GENERIC_SUCCESS);
   } catch (error: any) {
     console.error("Failed to get record");
     console.error(error);
@@ -47,7 +57,7 @@ export const uploadUserFile = async (event: APIGatewayEvent) => {
       errorStack: error.stack,
     };
 
-    RESPONSE = await CREATE_RESPONSE(ERROR, "ERROR", 500);
+    RESPONSE = await createResponseAsync(ERROR, GENERIC_ERROR);
   }
 
   return RESPONSE;

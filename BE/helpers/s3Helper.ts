@@ -7,7 +7,7 @@ import {
 import { Upload } from "@aws-sdk/lib-storage";
 const CLIENT = new S3Client({});
 
-export const UPLOAD_FILE = async (
+export const uploadFileAsync = async (
   bucketName: string,
   fileName: string,
   fileContent: Buffer | string
@@ -26,7 +26,7 @@ export const UPLOAD_FILE = async (
   return await UPLOAD.done();
 };
 
-export const CREATE_BUCKET_IF_NOT_EXISTS = async (bucketName: string) => {
+export const createBUcketIfNotExistsAsync = async (bucketName: string) => {
   let DOES_BUCKET_EXISTS;
   try {
     const RESULT = await CLIENT.send(
@@ -57,7 +57,7 @@ export const CREATE_BUCKET_IF_NOT_EXISTS = async (bucketName: string) => {
   }
 };
 
-export const GET_S3_URL_FOR_FILE = async (
+export const getS3UrlForFileAsync = async (
   bucketName: string,
   fileName: string
 ) => {

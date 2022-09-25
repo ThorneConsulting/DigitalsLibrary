@@ -1,7 +1,7 @@
 import * as ROUTES from "./routes";
 
 module.exports = {
-  getUserFiles: ROUTES.getUserFiles,
-  uploadUserFile: ROUTES.uploadUserFile,
-  createUserBucketIfNotExist: ROUTES.createUserBucketIfNotExist,
+  getUserFiles: ROUTES.getUserFilesAsync,
+  uploadUserFile: ROUTES.uploadUserFileAsync,
+  createUserBucketIfNotExist: ROUTES.createUserBucketIfNotExistAsync,
 };

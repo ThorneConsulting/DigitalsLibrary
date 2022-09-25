@@ -11,6 +11,8 @@ provider:
   environment:
     DYNAMO_DB_FILE_META_DATA_TABLE_NAME: ${self:custom.fileMetaDataTable}
     DYNAMO_DB_HASH_TABLE_NAME: ${self:custom.hashTable}
+    COGNITO_USER_POOL_ID: "ap-southeast-2_YVSpAqxya"
+    COGNITO_USER_POOL_CLIENT_SECRET: "1geodasbkgprokukl0fmo12dei"
 
 custom:
   fileMetaDataTable: file-meta-data-${self:provider.stage}
@@ -189,7 +191,6 @@ resources:
         LogoutURLs:
           - https://example.com
         AllowedOAuthFlows:
-          - code
           - implicit
         AllowedOAuthScopes:
           - email
