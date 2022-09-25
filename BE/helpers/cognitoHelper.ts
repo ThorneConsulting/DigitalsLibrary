@@ -5,7 +5,7 @@ export const verifyValidUserIdAsync = async (
   authToken: string,
   userId?: string
 ) => {
-  if (!!userId) {
+  if (userId === undefined) {
     return false;
   }
   if (COGNITO.userPoolId === undefined || COGNITO.clientId === undefined) {

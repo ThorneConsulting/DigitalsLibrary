@@ -44,7 +44,9 @@ export const applyCommonValidationsAsync = async (event: APIGatewayEvent) => {
 
   const AUTH_TOKEN = event.headers.Authorization;
   const USER_ID = event.pathParameters?.userId;
+  console.log("UserId", USER_ID);
   const IS_VALID_USERID = await verifyValidUserIdAsync(AUTH_TOKEN, USER_ID);
+  console.log("IsUserIdValid", IS_VALID_USERID);
   return IS_VALID_USERID
     ? await createResponseAsync({}, GENERIC_SUCCESS)
     : await createResponseAsync(
