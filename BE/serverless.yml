@@ -187,9 +187,9 @@ resources:
         RefreshTokenValidity: 1
         AllowedOAuthFlowsUserPoolClient: true
         CallbackURLs:
-          - https://example.com
+          - http://my-digitals-fe.s3-website-ap-southeast-2.amazonaws.com/home
         LogoutURLs:
-          - https://example.com
+          - http://my-digitals-fe.s3-website-ap-southeast-2.amazonaws.com/
         AllowedOAuthFlows:
           - implicit
         AllowedOAuthScopes:
