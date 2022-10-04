@@ -187,9 +187,9 @@ resources:
         RefreshTokenValidity: 1
         AllowedOAuthFlowsUserPoolClient: true
         CallbackURLs:
-          - http://my-digitals-fe.s3-website-ap-southeast-2.amazonaws.com/home
+          - https://d363boo6l83qtq.cloudfront.net/home
         LogoutURLs:
-          - http://my-digitals-fe.s3-website-ap-southeast-2.amazonaws.com/
+          - https://d363boo6l83qtq.cloudfront.net/
         AllowedOAuthFlows:
           - implicit
         AllowedOAuthScopes:
@@ -201,3 +201,15 @@ resources:
           - "ALLOW_CUSTOM_AUTH"
           - "ALLOW_REFRESH_TOKEN_AUTH"
           - "ALLOW_USER_SRP_AUTH"
+{
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Sid": "PublicAccessForMyDigitalsFe",
+			"Effect": "Allow",
+			"Principal": "*",
+			"Action": "s3:GetObject",
+			"Resource": "arn:aws:s3:::my-digitals-fe/*"
+		},
+	]
+}
