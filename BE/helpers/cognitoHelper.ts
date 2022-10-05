@@ -22,6 +22,5 @@ export const verifyValidUserIdAsync = async (
   const payload = await verifier.verify(
     authToken // the JWT as string
   );
-
   return payload.sub === userId;
 };

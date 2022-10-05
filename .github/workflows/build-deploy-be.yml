@@ -1,0 +1,54 @@
+name: Build and Deploy BE Api
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the main branch
+on:
+  push:
+    branches: [main]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "deploy"
+  deploy:
+    name: Build and deploys
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: BE
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - uses: actions/cache@v2
+        with:
+          path: "**/node_modules"
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16.x
+
+      - name: Install typescript
+        run: npm i -g typescript
+
+      - name: Install serverless globally
+        run: npm install -g serverless
+
+      - name: Install serverless plugin
+        run: serverless plugin install --name serverless-apigw-binary && serverless plugin install --name serverless-iam-roles-per-function && serverless plugin install --name serverless-plugin-typescript
+
+      - name: Configure serverless authentication
+        run: sls config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Install project dependencies
+        run: npm ci
+
+      - name: Build
+        run: tsc
+
+      - name: Deploy lambda function
+        run: sls deploy
