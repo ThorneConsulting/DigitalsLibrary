@@ -69,7 +69,7 @@ const LandingPage: Component = () => {
         </div>
       </div>
       <br />
-      <div class="container-fluid">Some Container content</div>
+      <div class="container-fluid">Some Container content new</div>
     </div>
   );
 };
