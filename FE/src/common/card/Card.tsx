@@ -5,7 +5,7 @@ type CardMediaContentType = {
   alt: string;
 };
 const CardComponent: Component<{
-  cardContent: string;
+  cardContent: string | HTMLElement;
   cardTitle: string;
   cardActionsContent: HTMLElement | null;
   cardMediaContent?: CardMediaContentType;
@@ -18,7 +18,7 @@ const CardComponent: Component<{
         alt={props.cardMediaContent?.alt}
       />
       <div class="card-body">
-        <h5 class="card-title">{props.cardTitle}</h5>
+        <h4 class="card-title">{props.cardTitle}</h4>
         <p class="card-text">{props.cardContent}</p>
         {props.cardActionsContent}
       </div>

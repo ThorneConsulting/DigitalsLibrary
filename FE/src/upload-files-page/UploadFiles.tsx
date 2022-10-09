@@ -1,5 +1,4 @@
 import { Component, createSignal } from "solid-js";
-import styles from "./UploadFiles.module.scss";
 import ModalComponent from "../common/modal/Modal";
 const [isModalOpen, setIsModalOpen] = createSignal(false);
 const [files, setFiles] = createSignal();
@@ -30,7 +29,7 @@ const UploadFiles: Component = () => {
         style={{ border: "0.1 rem", "border-style": "dashed" }}
         ondrop={dropEvent}
       >
-        <div class={styles.iconContainer}>
+        <div class="icon-container" style={{ "font-size": "10rem" }}>
           <i class="bi bi-cloud-upload-fill"></i>
         </div>
         <span> Drag and drop files here or click "Choose a file"</span>

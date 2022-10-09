@@ -1,7 +1,6 @@
 import { Component, createSignal } from "solid-js";
 import AppHeader from "../common/app-header/AppHeader";
 import { Outlet } from "@solidjs/router";
-import styles from "./Home.module.scss";
 const sideBarConfig = {
   itemConfig: [
     {
@@ -18,7 +17,10 @@ const sideBarConfig = {
 };
 const HomePage: Component = () => {
   return (
-    <div class={styles.container}>
+    <div
+      class="container d-flex justify-content-center align-items-center"
+      style={{ height: "100%", width: "100%" }}
+    >
       <AppHeader sidebarItems={sideBarConfig}></AppHeader>
       <Outlet></Outlet>
     </div>

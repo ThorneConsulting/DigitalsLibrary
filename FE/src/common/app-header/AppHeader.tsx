@@ -57,6 +57,7 @@ const AppHeader: Component<{ sidebarItems: SideBarConfig }> = (props) => {
                         href={item.link}
                       >
                         {item.icon}
+                        &nbsp;
                         {item.text}
                       </a>
                     )
