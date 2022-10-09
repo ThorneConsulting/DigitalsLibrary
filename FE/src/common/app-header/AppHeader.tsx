@@ -14,7 +14,7 @@ type ItemConfig = {
 const AppHeader: Component<{ sidebarItems: SideBarConfig }> = (props) => {
   return (
     <header>
-      <nav class="navbar bg-light fixed-top">
+      <nav class="navbar bg-light fixed-top ">
         <div class="container-fluid">
           <a class="navbar-brand" href="#">
             My Digitals

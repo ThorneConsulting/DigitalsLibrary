@@ -1,4 +1,4 @@
-import { Component } from "solid-js";
+import { Component, createSignal } from "solid-js";
 import AppHeader from "../common/app-header/AppHeader";
 import { Outlet } from "@solidjs/router";
 import styles from "./Home.module.scss";

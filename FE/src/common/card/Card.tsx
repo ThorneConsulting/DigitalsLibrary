@@ -8,14 +8,14 @@ const CardComponent: Component<{
   cardContent: string;
   cardTitle: string;
   cardActionsContent: HTMLElement | null;
-  cardMediaContent: CardMediaContentType;
+  cardMediaContent?: CardMediaContentType;
 }> = (props) => {
   return (
-    <div class="card" style="width: 18rem;">
+    <div class="card" style={{ width: "18rem" }}>
       <img
-        src={props.cardMediaContent.image}
+        src={props.cardMediaContent?.image}
         class="card-img-top"
-        alt={props.cardMediaContent.alt}
+        alt={props.cardMediaContent?.alt}
       />
       <div class="card-body">
         <h5 class="card-title">{props.cardTitle}</h5>

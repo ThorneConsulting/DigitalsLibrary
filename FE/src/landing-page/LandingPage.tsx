@@ -1,7 +1,7 @@
 import { Component } from "solid-js";
 import AppHeader from "../common/app-header/AppHeader";
 import CardComponent from "../common/card/Card";
-import styles from "./LandingPage.module.css";
+import styles from "./LandingPage.module.scss";
 
 const cardContent =
   "Some quick example text to build on the card title and make up the bulk of the card's content.";
@@ -24,7 +24,7 @@ const loginLink =
   "https://my-digi-lab.auth.ap-southeast-2.amazoncognito.com/login?client_id=1geodasbkgprokukl0fmo12dei&response_type=token&scope=email+openid&redirect_uri=https%3A%2F%2Fd363boo6l83qtq.cloudfront.net%2Fhome";
 const LandingPage: Component = () => {
   return (
-    <div class={styles.landingPageContainer} id="landing-page">
+    <div style={{ height: "100%", width: "100%" }}>
       <header>
         <nav class="navbar bg-light">
           <div class="container-fluid">
@@ -39,37 +39,93 @@ const LandingPage: Component = () => {
           </div>
         </nav>
       </header>
-      <br />
-      <div class="container">
-        <div class="row">
-          <div class="col-4">
-            <CardComponent
-              cardContent={cardContent}
-              cardMediaContent={cardMediaContent}
-              cardActionsContent={cardActionsContent()}
-              cardTitle="Dummy Card"
-            ></CardComponent>
-          </div>
-          <div class="col-4">
-            <CardComponent
-              cardContent={cardContent}
-              cardMediaContent={cardMediaContent}
-              cardActionsContent={cardActionsContent()}
-              cardTitle="Dummy Card"
-            ></CardComponent>
-          </div>
-          <div class="col-4">
-            <CardComponent
-              cardContent={cardContent}
-              cardMediaContent={cardMediaContent}
-              cardActionsContent={cardActionsContent()}
-              cardTitle="Dummy Card"
-            ></CardComponent>
+      <div
+        class="container"
+        style={{
+          height: "100%",
+          width: "100%",
+        }}
+      >
+        <br />
+        <div
+          class="container d-flex justify-content-center align-items-center"
+          style={{ width: "100%", height: "30%" }}
+        >
+          <h2>
+            Store and save your craft work easily with MyDigitals online app
+          </h2>
+        </div>
+        <br />
+        <hr style={{ width: "100%" }} />
+        <div class="pricing-container d-flex justify-content-center align-items-center">
+          <h2>Pricing</h2>
+        </div>
+        <div
+          class="container d-flex justify-content-center align-items-center"
+          style={{ width: "100%" }}
+        >
+          <div class="row">
+            <div class="col-4">
+              <CardComponent
+                cardContent={cardContent}
+                cardMediaContent={cardMediaContent}
+                cardActionsContent={cardActionsContent()}
+                cardTitle="Dummy Card"
+              ></CardComponent>
+            </div>
+            <div class="col-4">
+              <CardComponent
+                cardContent={cardContent}
+                cardMediaContent={cardMediaContent}
+                cardActionsContent={cardActionsContent()}
+                cardTitle="Dummy Card"
+              ></CardComponent>
+            </div>
+            <div class="col-4">
+              <CardComponent
+                cardContent={cardContent}
+                cardMediaContent={cardMediaContent}
+                cardActionsContent={cardActionsContent()}
+                cardTitle="Dummy Card"
+              ></CardComponent>
+            </div>
           </div>
         </div>
       </div>
-      <br />
-      <div class="container-fluid">Some Container content new</div>
+      <div class="container">
+        <footer class="py-3 my-4">
+          <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+            <li class="nav-item">
+              <a href="#" class="nav-link px-2 text-muted">
+                Home
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link px-2 text-muted">
+                Features
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link px-2 text-muted">
+                Pricing
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link px-2 text-muted">
+                FAQs
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link px-2 text-muted">
+                About
+              </a>
+            </li>
+          </ul>
+          <p class="text-center text-muted">
+            &copy; MyDigitals v 1.0.0 2022 Company, Inc
+          </p>
+        </footer>
+      </div>
     </div>
   );
 };

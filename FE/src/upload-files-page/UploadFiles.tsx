@@ -12,14 +12,24 @@ const dropEvent = (e: Event) => {
 const inputChangeHandler = (e: Event) => {
   var inputElement = e.target as HTMLInputElement;
   console.log(inputElement.files);
+  console.log(window.location.href);
+  console.log(location);
 };
 const modalContent = () => {
   return (<div></div>) as HTMLElement;
 };
+
 const UploadFiles: Component = () => {
   return (
-    <div class={styles.container}>
-      <div class={styles.borderContainer} ondrop={dropEvent}>
+    <div
+      class="container d-flex justify-content-center align-items-center"
+      style={{ height: "100%", width: "100%" }}
+    >
+      <div
+        class="container d-flex flex-column justify-content-center align-items-center"
+        style={{ border: "0.1 rem", "border-style": "dashed" }}
+        ondrop={dropEvent}
+      >
         <div class={styles.iconContainer}>
           <i class="bi bi-cloud-upload-fill"></i>
         </div>
