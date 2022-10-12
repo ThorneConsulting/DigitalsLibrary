@@ -36,18 +36,23 @@ export const decryptJwtAsync = async (authToken: string | undefined) => {
     console.warn("Client id", COGNITO.clientId);
     return null;
   }
-  const verifier = CognitoJwtVerifier.create({
-    userPoolId: COGNITO.userPoolId,
-    tokenUse: "id",
-    clientId: COGNITO.clientId,
-  });
-  const payload = await verifier.verify(
-    authToken // the JWT as string
-  );
-  console.log("PAYLOAD", payload);
-  return {
-    userId: payload.sub,
-    userName: payload["cognito:username"],
-    email: payload.email,
-  } as UserData;
+  try {
+    const verifier = CognitoJwtVerifier.create({
+      userPoolId: COGNITO.userPoolId,
+      tokenUse: "id",
+      clientId: COGNITO.clientId,
+    });
+    const payload = await verifier.verify(
+      authToken // the JWT as string
+    );
+    console.log("PAYLOAD", payload);
+    return {
+      userId: payload.sub,
+      userName: payload["cognito:username"],
+      email: payload.email,
+    } as UserData;
+  } catch (e: any) {
+    console.log(e);
+    return null;
+  }
 };
