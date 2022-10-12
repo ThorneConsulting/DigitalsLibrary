@@ -5,13 +5,15 @@ import { createResponseAsync } from "../utils";
 
 export const getUserDataAsync = async (event: APIGatewayEvent) => {
   const AUTH_TOKEN = event.headers.Authorization;
+  console.log("AUTH_TOKEN", AUTH_TOKEN);
   const RESULT = decryptJwt(AUTH_TOKEN);
+  console.log("RESULT", RESULT);
   if (RESULT == null) {
-    createResponseAsync(
+    return createResponseAsync(
       {},
       UNAUTHORIZED,
       "Either no auth token found or cognito config not found"
     );
   }
-  createResponseAsync(RESULT, GENERIC_SUCCESS);
+  return createResponseAsync(RESULT, GENERIC_SUCCESS);
 };
