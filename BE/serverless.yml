@@ -46,6 +46,17 @@ functions:
         Action:
           - "dynamoDB:GetItem"
         Resource: !GetAtt MyDigitalsHashable.Arn
+  getUserFiles:
+    handler: api.getUserData
+    name: get-user-data
+    memorySize: 256 # MB
+    timeout: 20 # seconds
+    events:
+      - http:
+          path: /user-data
+          method: GET
+          authorizer:
+            arn: arn:aws:cognito-idp:ap-southeast-2:137481829477:userpool/ap-southeast-2_YVSpAqxya
   uploadUserFile:
     handler: api.uploadUserFile
     name: upload-user-file

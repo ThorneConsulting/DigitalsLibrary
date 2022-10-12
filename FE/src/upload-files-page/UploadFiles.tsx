@@ -1,5 +1,5 @@
 import { Component, createSignal } from "solid-js";
-import ModalComponent from "../common/modal/Modal";
+import { onMount } from "solid-js";
 const [isModalOpen, setIsModalOpen] = createSignal(false);
 const [files, setFiles] = createSignal();
 const closeModal = () => {
@@ -9,10 +9,16 @@ const dropEvent = (e: Event) => {
   console.log(e.target);
 };
 const inputChangeHandler = (e: Event) => {
-  var inputElement = e.target as HTMLInputElement;
-  console.log(inputElement.files);
-  console.log(window.location.href);
-  console.log(location);
+  const inputElement = e.target as HTMLInputElement;
+  const filesToUpload = inputElement.files;
+  if (filesToUpload)
+    for (let fileNumber = 0; fileNumber < filesToUpload.length; fileNumber++) {
+      setFiles(filesToUpload.item(fileNumber));
+    }
+};
+
+const uploadClickHandler = () => {
+  console.log(files());
 };
 const modalContent = () => {
   return (<div></div>) as HTMLElement;
@@ -20,31 +26,34 @@ const modalContent = () => {
 
 const UploadFiles: Component = () => {
   return (
-    <div
-      class="container d-flex justify-content-center align-items-center"
-      style={{ height: "100%", width: "100%" }}
-    >
+    <div class="container-sm container-md container-lg d-flex justify-content-center align-items-center">
       <div
-        class="container d-flex flex-column justify-content-center align-items-center"
-        style={{ border: "0.1 rem", "border-style": "dashed" }}
+        class="container-sm container-md container-lg d-flex flex-column justify-content-center align-items-center"
+        style={{
+          border: "0.1 rem",
+          "border-style": "dashed",
+          display: "",
+        }}
         ondrop={dropEvent}
       >
         <div class="icon-container" style={{ "font-size": "10rem" }}>
           <i class="bi bi-cloud-upload-fill"></i>
         </div>
         <span> Drag and drop files here or click "Choose a file"</span>
-        <input
-          type="file"
-          accept=".pdf, .png, .jpg"
-          multiple
-          onChange={inputChangeHandler}
-        >
-          Choose a file
-        </input>
+        <div class="container-fluid d-flex justify-content-center align-items-center p-2">
+          <input
+            type="file"
+            accept=".pdf, .png, .jpg"
+            multiple
+            onChange={inputChangeHandler}
+            value="
+          Choose a file"
+          />
+        </div>
         <button
           type="button"
           class="btn btn-primary"
-          onClick={inputChangeHandler}
+          onClick={uploadClickHandler}
         >
           Upload
         </button>
@@ -53,6 +62,15 @@ const UploadFiles: Component = () => {
     </div>
   );
 };
+
+onMount(() => {
+  const authToken = location.hash
+    .split("#")[1]
+    .split("=")[1]
+    .split("access_token")[0]
+    .substring(0, 1038);
+  document.cookie = `token=${authToken}`;
+});
 const toggelModal = () => {
   setIsModalOpen(!isModalOpen());
   console.log(isModalOpen());

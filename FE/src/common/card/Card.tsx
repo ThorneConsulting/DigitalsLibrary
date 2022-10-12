@@ -1,5 +1,4 @@
 import { Component, Show } from "solid-js";
-import styles from "./Card.module.css";
 type CardMediaContentType = {
   image: string | undefined;
   alt: string;

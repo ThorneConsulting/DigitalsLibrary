@@ -1,4 +1,5 @@
 import { Component } from "solid-js";
+import AppFooter from "../common/app-footer/AppFooter";
 import AppHeader from "../common/app-header/AppHeader";
 import CardComponent from "../common/card/Card";
 
@@ -37,7 +38,13 @@ const cardMediaContent = {
   image: "https://mui.com/static/images/cards/live-from-space.jpg",
   alt: "Card image",
 };
-
+const headerContent = () => {
+  return (
+    <button type="button" class="btn btn-primary" onClick={navigateToLoginPage}>
+      Login / Sign up
+    </button>
+  ) as HTMLElement;
+};
 const cardActionsContent = () => {
   return (
     <a href="#" class="btn btn-primary">
@@ -52,36 +59,19 @@ const loginLink =
   "https://my-digi-lab.auth.ap-southeast-2.amazoncognito.com/login?client_id=1geodasbkgprokukl0fmo12dei&response_type=token&scope=email+openid&redirect_uri=https%3A%2F%2Fd363boo6l83qtq.cloudfront.net%2Fhome";
 const LandingPage: Component = () => {
   return (
-    <div style={{ height: "100%", width: "100%" }}>
-      <header>
-        <nav class="navbar bg-light">
-          <div class="container-fluid">
-            <span class="navbar-brand mb-0 h1">My Digitals</span>
-            <button
-              type="button"
-              class="btn btn-primary"
-              onClick={navigateToLoginPage}
-            >
-              Login / Sign up
-            </button>
-          </div>
-        </nav>
-      </header>
+    <div
+      class="container"
+      style={{ height: "100%", width: "100%", padding: "5rem" }}
+    >
+      <AppHeader
+        headerConfig={{ title: "My Digitals", headerContent: headerContent() }}
+      ></AppHeader>
       <div
-        class="container"
-        style={{
-          height: "100%",
-          width: "100%",
-        }}
+        class="container-sm container-md container-lg"
+        style={{ height: "100%", width: "100%" }}
       >
         <br />
-        <div
-          class="container d-flex justify-content-center align-items-center"
-          style={{
-            width: "100%",
-            height: "30%",
-          }}
-        >
+        <div class="container-fluid d-flex justify-content-center align-items-center">
           <h2>
             Store and save your craft work easily with MyDigitals online app
           </h2>
@@ -91,26 +81,23 @@ const LandingPage: Component = () => {
         <div class="pricing-container d-flex justify-content-center align-items-center">
           <h2>Pricing</h2>
         </div>
-        <div
-          class="container d-flex justify-content-center align-items-center"
-          style={{ width: "100%", height: "50%" }}
-        >
-          <div class="row">
-            <div class="col-4">
+        <div class="container-sm container-md container-lg d-flex flex-column justify-content-center align-items-center">
+          <div class="container-fluid d-flex">
+            <div class="col-sm-4 col-md-4 col-lg-4 p-2">
               <CardComponent
                 cardContent={cardContent()}
                 cardActionsContent={cardActionsContent()}
                 cardTitle="$0.00"
               ></CardComponent>
             </div>
-            <div class="col-4">
+            <div class="col-sm-4 col-md-4 col-lg-4 p-2">
               <CardComponent
                 cardContent={cardContent()}
                 cardActionsContent={cardActionsContent()}
                 cardTitle="$10.00"
               ></CardComponent>
             </div>
-            <div class="col-4">
+            <div class="col-sm-4 col-md-4 col-lg-4 p-2">
               <CardComponent
                 cardContent={cardContent()}
                 cardActionsContent={cardActionsContent()}
@@ -120,40 +107,7 @@ const LandingPage: Component = () => {
           </div>
         </div>
       </div>
-      <div class="container">
-        <footer class="py-3 my-4">
-          <ul class="nav justify-content-center border-bottom pb-3 mb-3">
-            <li class="nav-item">
-              <a href="#" class="nav-link px-2 text-muted">
-                Home
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="#" class="nav-link px-2 text-muted">
-                Features
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="#" class="nav-link px-2 text-muted">
-                Pricing
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="#" class="nav-link px-2 text-muted">
-                FAQs
-              </a>
-            </li>
-            <li class="nav-item">
-              <a href="#" class="nav-link px-2 text-muted">
-                About
-              </a>
-            </li>
-          </ul>
-          <p class="text-center text-muted">
-            &copy; MyDigitals v 1.0.0 2022 Company, Inc
-          </p>
-        </footer>
-      </div>
+      <AppFooter></AppFooter>
     </div>
   );
 };

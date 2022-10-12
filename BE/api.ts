@@ -4,4 +4,5 @@ module.exports = {
   getUserFiles: ROUTES.getUserFilesAsync,
   uploadUserFile: ROUTES.uploadUserFileAsync,
   createUserBucketIfNotExist: ROUTES.createUserBucketIfNotExistAsync,
+  getUserData: ROUTES.getUserDataAsync,
 };
