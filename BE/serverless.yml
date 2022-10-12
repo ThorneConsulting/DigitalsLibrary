@@ -46,7 +46,7 @@ functions:
         Action:
           - "dynamoDB:GetItem"
         Resource: !GetAtt MyDigitalsHashable.Arn
-  getUserFiles:
+  getUserData:
     handler: api.getUserData
     name: get-user-data
     memorySize: 256 # MB
