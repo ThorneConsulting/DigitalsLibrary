@@ -44,6 +44,7 @@ export const decryptJwtAsync = async (authToken: string | undefined) => {
   const payload = await verifier.verify(
     authToken // the JWT as string
   );
+  console.log("PAYLOAD", payload);
   return {
     userId: payload.sub,
     userName: payload["cognito:username"],
