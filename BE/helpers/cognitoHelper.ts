@@ -26,7 +26,7 @@ export const verifyValidUserIdAsync = async (
   return payload.sub === userId;
 };
 
-export const decryptJwt = async (authToken: string | undefined) => {
+export const decryptJwtAsync = async (authToken: string | undefined) => {
   if (authToken == undefined) {
     return null;
   }
