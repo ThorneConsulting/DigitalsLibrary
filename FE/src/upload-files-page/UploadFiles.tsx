@@ -69,11 +69,13 @@ onMount(async () => {
     .split("=")[1]
     .split("access_token")[0]
     .substring(0, 1038);
+  console.log(authToken);
   document.cookie = `token=${authToken}`;
 
   const userData = (
     await fetch(
-      "https://fptldt1wic.execute-api.ap-southeast-2.amazonaws.com/dev/user-data"
+      "https://fptldt1wic.execute-api.ap-southeast-2.amazonaws.com/dev/user-data",
+      { headers: { Authorization: authToken } }
     )
   ).json();
   console.log(userData);
