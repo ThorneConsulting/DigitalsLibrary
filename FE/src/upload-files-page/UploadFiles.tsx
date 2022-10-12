@@ -63,13 +63,20 @@ const UploadFiles: Component = () => {
   );
 };
 
-onMount(() => {
+onMount(async () => {
   const authToken = location.hash
     .split("#")[1]
     .split("=")[1]
     .split("access_token")[0]
     .substring(0, 1038);
   document.cookie = `token=${authToken}`;
+
+  const userData = (
+    await fetch(
+      "https://fptldt1wic.execute-api.ap-southeast-2.amazonaws.com/dev/user-data"
+    )
+  ).json();
+  console.log(userData);
 });
 const toggelModal = () => {
   setIsModalOpen(!isModalOpen());
