@@ -75,7 +75,7 @@ onMount(async () => {
   const userData = (
     await fetch(
       "https://fptldt1wic.execute-api.ap-southeast-2.amazonaws.com/dev/user-data",
-      { headers: { Authorization: authToken } }
+      { headers: { Authorization: authToken }, method: "GET" }
     )
   ).json();
   console.log(userData);
