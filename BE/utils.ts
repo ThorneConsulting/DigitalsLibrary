@@ -6,7 +6,8 @@ import { ApiResponse } from "./models";
 export const createResponseAsync = async (
   data: any,
   responseObject: ApiResponse,
-  customMessage?: string
+  customMessage?: string,
+  headers?: Object
 ) => {
   let RESPONSE;
   if (customMessage === undefined) {
@@ -17,6 +18,15 @@ export const createResponseAsync = async (
         message: responseObject.message,
       }),
     };
+    if (headers) {
+      RESPONSE = {
+        ...RESPONSE,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Credentials": true,
+        },
+      };
+    }
   } else {
     RESPONSE = {
       statusCode: responseObject.statusCode,
