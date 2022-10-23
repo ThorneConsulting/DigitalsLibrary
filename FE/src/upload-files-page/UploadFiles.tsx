@@ -74,7 +74,7 @@ onMount(async () => {
 
   const userData = (
     await fetch(
-      "https://fptldt1wic.execute-api.ap-southeast-2.amazonaws.com/dev/user-data",
+      "https://dxe7tgo401.execute-api.ap-southeast-2.amazonaws.com/dev/user-data",
       { headers: { Authorization: authToken }, method: "GET" }
     )
   ).json();
