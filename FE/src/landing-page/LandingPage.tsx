@@ -56,7 +56,7 @@ const navigateToLoginPage = () => {
   window.open(loginLink, "_self");
 };
 const loginLink =
-  "https://my-digi-lab.auth.ap-southeast-2.amazoncognito.com/login?client_id=1geodasbkgprokukl0fmo12dei&response_type=token&scope=email+openid&redirect_uri=https%3A%2F%2Fd363boo6l83qtq.cloudfront.net%2Fhome";
+  "https://mydigitals.auth.ap-southeast-2.amazoncognito.com/login?client_id=1m4ncral85fg9f6quihiqcqpbi&response_type=token&scope=email+openid&redirect_uri=https%3A%2F%2Fd363boo6l83qtq.cloudfront.net%2Fhome";
 const LandingPage: Component = () => {
   return (
     <div
