@@ -72,12 +72,13 @@ onMount(async () => {
   console.log(authToken);
   document.cookie = `token=${authToken}`;
 
-  const userData = (
+  const response = (
     await fetch(
       "https://dxe7tgo401.execute-api.ap-southeast-2.amazonaws.com/dev/user-data",
       { headers: { Authorization: authToken }, method: "GET" }
     )
   ).json();
+  const userData = await response;
   console.log(userData);
 });
 const toggelModal = () => {

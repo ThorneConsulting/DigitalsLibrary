@@ -21,7 +21,8 @@ export const verifyValidUserIdAsync = async (
     clientId: COGNITO.clientId,
   });
   const payload = await verifier.verify(
-    authToken // the JWT as string
+    authToken, // the JWT as string
+    { tokenUse: "id", clientId: COGNITO.clientId }
   );
   return payload.sub === userId;
 };
@@ -30,6 +31,7 @@ export const decryptJwtAsync = async (authToken: string | undefined) => {
   if (authToken == undefined) {
     return null;
   }
+  console.log("AUTH", authToken);
   if (COGNITO.userPoolId === undefined || COGNITO.clientId === undefined) {
     console.log("Userpool id or Client id undefined");
     console.warn("Userpool id", COGNITO.userPoolId);
@@ -42,8 +44,10 @@ export const decryptJwtAsync = async (authToken: string | undefined) => {
       tokenUse: "id",
       clientId: COGNITO.clientId,
     });
+    console.log("VERIFIER", verifier);
     const payload = await verifier.verify(
-      authToken // the JWT as string
+      authToken, // the JWT as string,
+      { tokenUse: "id", clientId: COGNITO.clientId }
     );
     console.log("PAYLOAD", payload);
     return {
