@@ -75,7 +75,13 @@ onMount(async () => {
   const response = (
     await fetch(
       "https://dxe7tgo401.execute-api.ap-southeast-2.amazonaws.com/dev/user-data",
-      { headers: { Authorization: authToken }, method: "GET" }
+      {
+        headers: {
+          Authorization: authToken,
+          "X-Amz-Date": new Date().toUTCString(),
+        },
+        method: "GET",
+      }
     )
   ).json();
   const userData = await response;
