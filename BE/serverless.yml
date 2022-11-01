@@ -36,9 +36,9 @@ functions:
           path: /users/{userId}/files
           method: GET
           authorizer:
-            # Provide both type and authorizerId
-            type: COGNITO_USER_POOLS # TOKEN or REQUEST or COGNITO_USER_POOLS, same as AWS Cloudformation documentation
-            authorizerId: arn:aws:cognito-idp:ap-southeast-2:137481829477:userpool/ap-southeast-2_wEsOp67QH
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: arn:aws:cognito-idp:ap-southeast-2:137481829477:userpool/ap-southeast-2_wEsOp67QH
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -58,9 +58,9 @@ functions:
           path: /user-data
           method: GET
           authorizer:
-            # Provide both type and authorizerId
-            type: COGNITO_USER_POOLS # TOKEN or REQUEST or COGNITO_USER_POOLS, same as AWS Cloudformation documentation
-            authorizerId: arn:aws:cognito-idp:ap-southeast-2:137481829477:userpool/ap-southeast-2_wEsOp67QH
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: arn:aws:cognito-idp:ap-southeast-2:137481829477:userpool/ap-southeast-2_wEsOp67QH
           cors: true
   uploadUserFile:
     handler: api.uploadUserFile
@@ -72,9 +72,9 @@ functions:
           path: /users/{userId}/file
           method: POST
           authorizer:
-            # Provide both type and authorizerId
-            type: COGNITO_USER_POOLS # TOKEN or REQUEST or COGNITO_USER_POOLS, same as AWS Cloudformation documentation
-            authorizerId: arn:aws:cognito-idp:ap-southeast-2:137481829477:userpool/ap-southeast-2_wEsOp67QH
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: arn:aws:cognito-idp:ap-southeast-2:137481829477:userpool/ap-southeast-2_wEsOp67QH
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -104,9 +104,9 @@ functions:
           path: /users/{userId}/file
           method: DELETE
           authorizer:
-            # Provide both type and authorizerId
-            type: COGNITO_USER_POOLS # TOKEN or REQUEST or COGNITO_USER_POOLS, same as AWS Cloudformation documentation
-            authorizerId: arn:aws:cognito-idp:ap-southeast-2:137481829477:userpool/ap-southeast-2_wEsOp67QH
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: arn:aws:cognito-idp:ap-southeast-2:137481829477:userpool/ap-southeast-2_wEsOp67QH
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -130,9 +130,9 @@ functions:
           path: /users/{userId}/create-user-bucket
           method: POST
           authorizer:
-            # Provide both type and authorizerId
-            type: COGNITO_USER_POOLS # TOKEN or REQUEST or COGNITO_USER_POOLS, same as AWS Cloudformation documentation
-            authorizerId: arn:aws:cognito-idp:ap-southeast-2:137481829477:userpool/ap-southeast-2_wEsOp67QH
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: arn:aws:cognito-idp:ap-southeast-2:137481829477:userpool/ap-southeast-2_wEsOp67QH
     iamRoleStatements:
       - Effect: "Allow"
         Action:
