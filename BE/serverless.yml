@@ -38,8 +38,7 @@ functions:
           authorizer:
             # Provide both type and authorizerId
             type: COGNITO_USER_POOLS # TOKEN or REQUEST or COGNITO_USER_POOLS, same as AWS Cloudformation documentation
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
+            authorizerId: arn:aws:cognito-idp:ap-southeast-2:137481829477:userpool/ap-southeast-2_wEsOp67QH
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -61,8 +60,7 @@ functions:
           authorizer:
             # Provide both type and authorizerId
             type: COGNITO_USER_POOLS # TOKEN or REQUEST or COGNITO_USER_POOLS, same as AWS Cloudformation documentation
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
+            authorizerId: arn:aws:cognito-idp:ap-southeast-2:137481829477:userpool/ap-southeast-2_wEsOp67QH
           cors: true
   uploadUserFile:
     handler: api.uploadUserFile
@@ -76,8 +74,7 @@ functions:
           authorizer:
             # Provide both type and authorizerId
             type: COGNITO_USER_POOLS # TOKEN or REQUEST or COGNITO_USER_POOLS, same as AWS Cloudformation documentation
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
+            authorizerId: arn:aws:cognito-idp:ap-southeast-2:137481829477:userpool/ap-southeast-2_wEsOp67QH
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -109,8 +106,7 @@ functions:
           authorizer:
             # Provide both type and authorizerId
             type: COGNITO_USER_POOLS # TOKEN or REQUEST or COGNITO_USER_POOLS, same as AWS Cloudformation documentation
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
+            authorizerId: arn:aws:cognito-idp:ap-southeast-2:137481829477:userpool/ap-southeast-2_wEsOp67QH
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -136,8 +132,7 @@ functions:
           authorizer:
             # Provide both type and authorizerId
             type: COGNITO_USER_POOLS # TOKEN or REQUEST or COGNITO_USER_POOLS, same as AWS Cloudformation documentation
-            authorizerId:
-              Ref: ApiGatewayAuthorizer
+            authorizerId: arn:aws:cognito-idp:ap-southeast-2:137481829477:userpool/ap-southeast-2_wEsOp67QH
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -228,14 +223,3 @@ resources:
           - "ALLOW_CUSTOM_AUTH"
           - "ALLOW_REFRESH_TOKEN_AUTH"
           - "ALLOW_USER_SRP_AUTH"
-    ApiGatewayAuthorizer:
-      Type: AWS::ApiGateway::Authorizer
-      Properties:
-        AuthorizerResultTtlInSeconds: 300
-        IdentitySource: method.request.header.Authorization
-        Name: Cognito
-        RestApiId:
-          Ref: dev-my-digitals-api
-        Type: COGNITO_USER_POOLS
-        ProviderARNs:
-          - arn:aws:cognito-idp:ap-southeast-2:137481829477:userpool/ap-southeast-2_wEsOp67QH
