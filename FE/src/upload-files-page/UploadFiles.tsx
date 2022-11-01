@@ -68,7 +68,7 @@ onMount(async () => {
     .split("#")[1]
     .split("=")[1]
     .split("access_token")[0]
-    .substring(0, 1038);
+    .split("&")[0];
   console.log(authToken);
   document.cookie = `token=${authToken}`;
 
