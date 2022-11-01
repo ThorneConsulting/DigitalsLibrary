@@ -37,8 +37,7 @@ functions:
           method: GET
           authorizer:
             type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: arn:aws:cognito-idp:ap-southeast-2:137481829477:userpool/ap-southeast-2_wEsOp67QH
+            arn: arn:aws:cognito-idp:ap-southeast-2:137481829477:userpool/ap-southeast-2_wEsOp67QH
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -59,8 +58,7 @@ functions:
           method: GET
           authorizer:
             type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: arn:aws:cognito-idp:ap-southeast-2:137481829477:userpool/ap-southeast-2_wEsOp67QH
+            arn: arn:aws:cognito-idp:ap-southeast-2:137481829477:userpool/ap-southeast-2_wEsOp67QH
           cors: true
   uploadUserFile:
     handler: api.uploadUserFile
@@ -105,8 +103,7 @@ functions:
           method: DELETE
           authorizer:
             type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: arn:aws:cognito-idp:ap-southeast-2:137481829477:userpool/ap-southeast-2_wEsOp67QH
+            arn: arn:aws:cognito-idp:ap-southeast-2:137481829477:userpool/ap-southeast-2_wEsOp67QH
     iamRoleStatements:
       - Effect: "Allow"
         Action:
@@ -131,8 +128,7 @@ functions:
           method: POST
           authorizer:
             type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: arn:aws:cognito-idp:ap-southeast-2:137481829477:userpool/ap-southeast-2_wEsOp67QH
+            arn: arn:aws:cognito-idp:ap-southeast-2:137481829477:userpool/ap-southeast-2_wEsOp67QH
     iamRoleStatements:
       - Effect: "Allow"
         Action:
