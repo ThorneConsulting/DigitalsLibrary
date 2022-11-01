@@ -47,6 +47,7 @@ functions:
         Action:
           - "dynamoDB:GetItem"
         Resource: !GetAtt MyDigitalsHashable.Arn
+
   getUserData:
     handler: api.getUserData
     name: get-user-data
@@ -54,11 +55,12 @@ functions:
     timeout: 20 # seconds
     events:
       - http:
-          path: /user-data
+          path: /users/user-data
           method: GET
           authorizer:
             type: COGNITO_USER_POOLS
             arn: arn:aws:cognito-idp:ap-southeast-2:137481829477:userpool/ap-southeast-2_wEsOp67QH
+
   uploadUserFile:
     handler: api.uploadUserFile
     name: upload-user-file
@@ -90,6 +92,7 @@ functions:
         Action:
           - "rekognition:DetectLabels"
         Resource: "*"
+
   deleteUserFile:
     handler: api.deleteUserFile
     name: delete-user-file
@@ -115,6 +118,7 @@ functions:
         Action:
           - "s3:*"
         Resource: "*"
+
   createUserBucketIfNotExist:
     handler: api.createUserBucketIfNotExist
     name: create-user-bucket-if-not-exist
@@ -132,6 +136,7 @@ functions:
         Action:
           - "s3:*"
         Resource: "*"
+
 resources:
   Resources:
     MyDigitalsMetaDataTable:
