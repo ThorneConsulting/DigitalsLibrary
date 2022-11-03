@@ -1,6 +1,13 @@
-import { Component, createSignal, mapArray } from "solid-js";
+import { Component, createSignal, mapArray, onMount } from "solid-js";
 import AppHeader from "../common/app-header/AppHeader";
-import { Outlet } from "@solidjs/router";
+import { Outlet, useNavigate } from "@solidjs/router";
+import {
+  createUserBucket,
+  extractTokenFromUrl,
+  getUserData,
+} from "../common/services";
+import { UserData } from "../common/models";
+const [userData, setUserData] = createSignal<UserData>();
 const sideBarConfig = {
   itemConfig: [
     {
@@ -45,6 +52,10 @@ const headerConfig = () => {
           ></button>
         </div>
         <div class="offcanvas-body">
+          <div class="container d-flex flex-column align-items-center border-bottom pb-3 mb-3">
+            <i class="bi bi-person-circle" style={{ "font-size": "2rem" }}></i>
+            <span>Welcome {userData()?.email}</span>
+          </div>
           <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
             <li class="nav-item">
               {mapArray(
@@ -95,4 +106,18 @@ const HomePage: Component = () => {
   );
 };
 
+onMount(async () => {
+  await extractTokenFromUrl();
+
+  let getUserDataResponse = await getUserData();
+  console.log(getUserDataResponse);
+  if (getUserDataResponse.message.includes("expired")) {
+    console.log(getUserDataResponse);
+    //window.location.replace("http://localhost:3000/");
+  } else {
+    setUserData(getUserDataResponse.data as UserData);
+  }
+  const createUserBucketResponse = await createUserBucket(userData()?.userId);
+  console.log(createUserBucketResponse);
+});
 export default HomePage;

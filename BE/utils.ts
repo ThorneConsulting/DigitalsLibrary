@@ -12,6 +12,10 @@ export const createResponseAsync = async (
   let RESPONSE;
   if (customMessage === undefined) {
     RESPONSE = {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
+      },
       statusCode: responseObject.statusCode,
       body: JSON.stringify({
         data: data,
@@ -21,10 +25,7 @@ export const createResponseAsync = async (
     if (headers) {
       RESPONSE = {
         ...RESPONSE,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Credentials": true,
-        },
+        ...headers,
       };
     }
   } else {

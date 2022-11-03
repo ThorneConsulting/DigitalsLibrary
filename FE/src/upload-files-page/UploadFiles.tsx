@@ -1,5 +1,4 @@
 import { Component, createSignal } from "solid-js";
-import { onMount } from "solid-js";
 const [isModalOpen, setIsModalOpen] = createSignal(false);
 const [files, setFiles] = createSignal();
 const closeModal = () => {
@@ -63,30 +62,6 @@ const UploadFiles: Component = () => {
   );
 };
 
-onMount(async () => {
-  const authToken = location.hash
-    .split("#")[1]
-    .split("=")[1]
-    .split("access_token")[0]
-    .split("&")[0];
-  console.log(authToken);
-  document.cookie = `token=${authToken}`;
-
-  const response = (
-    await fetch(
-      "https://dxe7tgo401.execute-api.ap-southeast-2.amazonaws.com/dev/users/user-data",
-      {
-        headers: {
-          Authorization: authToken,
-          "X-Amz-Date": new Date().toUTCString(),
-        },
-        method: "GET",
-      }
-    )
-  ).json();
-  const userData = await response;
-  console.log(userData);
-});
 const toggelModal = () => {
   setIsModalOpen(!isModalOpen());
   console.log(isModalOpen());
