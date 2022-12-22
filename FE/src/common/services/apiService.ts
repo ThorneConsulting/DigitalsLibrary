@@ -4,15 +4,10 @@ const BASE_URL =
   "https://dxe7tgo401.execute-api.ap-southeast-2.amazonaws.com/dev";
 const TOKEN = await getToken();
 export const getUserData = async () => {
-  const token = location.hash
-    .split("#")[1]
-    .split("=")[1]
-    .split("access_token")[0]
-    .split("&")[0];
   const RESPONSE = await (
     await fetch(`${BASE_URL}/users/user-data`, {
       headers: {
-        Authorization: token,
+        Authorization: TOKEN ? TOKEN : "",
         "X-Amz-Date": new Date().toUTCString(),
       },
       method: "GET",
