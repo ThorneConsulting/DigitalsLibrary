@@ -107,8 +107,6 @@ const HomePage: Component = () => {
 };
 
 onMount(async () => {
-  await extractTokenFromUrl();
-
   let getUserDataResponse = await getUserData();
   console.log(getUserDataResponse);
   const message = getUserDataResponse.message.toLowerCase();
