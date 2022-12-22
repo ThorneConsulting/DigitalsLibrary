@@ -7,7 +7,7 @@ export const getUserData = async () => {
   const RESPONSE = await (
     await fetch(`${BASE_URL}/users/user-data`, {
       headers: {
-        Authorization: TOKEN ? TOKEN : "",
+        Authorization: TOKEN,
         "X-Amz-Date": new Date().toUTCString(),
       },
       method: "GET",
@@ -25,7 +25,7 @@ export const createUserBucket = async (userId: string | undefined) => {
   const RESPONSE = await (
     await fetch(`${BASE_URL}+${PATH}`, {
       headers: {
-        Authorization: TOKEN ? TOKEN : "",
+        Authorization: TOKEN,
         "X-Amz-Date": new Date().toUTCString(),
       },
       method: "GET",
