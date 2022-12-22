@@ -11,6 +11,7 @@ export const extractTokenFromUrl = async () => {
       .split("&")[0];
     document.cookie = `token=${TOKEN}`;
   }
+  console.log(TOKEN);
 };
 
 export const getToken = async () => {

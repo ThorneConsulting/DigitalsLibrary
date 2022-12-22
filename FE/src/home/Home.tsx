@@ -114,7 +114,7 @@ onMount(async () => {
   const message = getUserDataResponse.message.toLowerCase();
   if (message.includes("expired") || message.includes("unauthorized")) {
     console.log(getUserDataResponse);
-    window.location.replace("http://localhost:3000/");
+    //window.location.replace("http://localhost:3000/");
   } else {
     setUserData(getUserDataResponse.data as UserData);
   }
