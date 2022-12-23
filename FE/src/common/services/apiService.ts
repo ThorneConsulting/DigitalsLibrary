@@ -23,7 +23,7 @@ export const createUserBucket = async (userId: string | undefined) => {
   }
   const PATH = `/users/${userId}/create-user-bucket`;
   const RESPONSE = await (
-    await fetch(`${BASE_URL}+${PATH}`, {
+    await fetch(`${BASE_URL}${PATH}`, {
       headers: {
         Authorization: TOKEN,
         "X-Amz-Date": new Date().toUTCString(),
