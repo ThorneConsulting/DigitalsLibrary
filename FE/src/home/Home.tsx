@@ -1,9 +1,10 @@
 import { Component, createSignal, mapArray, onMount } from "solid-js";
 import AppHeader from "../common/app-header/AppHeader";
-import { Outlet } from "@solidjs/router";
+import { Outlet, useNavigate } from "@solidjs/router";
 import { createUserBucket, getUserData } from "../common/services";
 import { UserData } from "../common/models";
 const [userData, setUserData] = createSignal<UserData>();
+const [isUnauthorized, setIsUnauthorized] = createSignal<boolean>();
 const sideBarConfig = {
   itemConfig: [
     {
@@ -89,6 +90,10 @@ const headerConfig = () => {
   ) as HTMLElement;
 };
 const HomePage: Component = () => {
+  const navigate = useNavigate();
+  if (isUnauthorized()) {
+    navigate("/", { replace: true });
+  }
   return (
     <div
       class="container-sm container-md container-lg d-flex justify-content-center align-items-center"
@@ -107,8 +112,9 @@ onMount(async () => {
   console.log(getUserDataResponse);
   const message = getUserDataResponse.message.toLowerCase();
   if (message.includes("expired") || message.includes("unauthorized")) {
-    console.log(getUserDataResponse);
+    setIsUnauthorized(true);
   } else {
+    setIsUnauthorized(false);
     setUserData(getUserDataResponse.data as UserData);
   }
   const createUserBucketResponse = await createUserBucket(userData()?.userId);

@@ -1,9 +1,11 @@
 import { Component, createSignal, onMount } from "solid-js";
 import { getUserData, uploadFiles } from "../common/services";
 import { UserData } from "../common/models";
+import { useNavigate } from "@solidjs/router";
 const [isModalOpen, setIsModalOpen] = createSignal(false);
 const [files, setFiles] = createSignal();
 const [userData, setUserData] = createSignal<UserData>();
+const [isUnauthorized, setIsUnauthorized] = createSignal<boolean>();
 const closeModal = () => {
   setIsModalOpen(false);
 };
@@ -29,6 +31,10 @@ const modalContent = () => {
 };
 
 const UploadFiles: Component = () => {
+  const navigate = useNavigate();
+  if (isUnauthorized()) {
+    navigate("/", { replace: true });
+  }
   return (
     <div class="container-sm container-md container-lg d-flex justify-content-center align-items-center">
       <div
@@ -69,10 +75,12 @@ const UploadFiles: Component = () => {
 
 onMount(async () => {
   let getUserDataResponse = await getUserData();
+  console.log(getUserDataResponse);
   const message = getUserDataResponse.message.toLowerCase();
   if (message.includes("expired") || message.includes("unauthorized")) {
-    //Navigate to /Login
+    setIsUnauthorized(true);
   } else {
+    setIsUnauthorized(false);
     setUserData(getUserDataResponse.data as UserData);
   }
 });

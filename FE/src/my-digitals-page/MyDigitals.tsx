@@ -2,9 +2,16 @@ import { Component, Show, createSignal, mapArray, onMount } from "solid-js";
 import NothingToDisplay from "../common/nothing-to-display/NothingToDisplay";
 import { UserData, UserFilesModel } from "../common/models";
 import { getUserData, getUserFiles } from "../common/services";
+import { useNavigate } from "@solidjs/router";
 const [userData, setUserData] = createSignal<UserData>();
 const [userFiles, setUserFiles] = createSignal<UserFilesModel[]>();
+const [mappeduserFiles, setMappedUserFiles] = createSignal<UserFilesModel[]>();
+const [isUnauthorized, setIsUnauthorized] = createSignal<boolean>();
 const MyDigitals: Component = () => {
+  const navigate = useNavigate();
+  if (isUnauthorized()) {
+    navigate("/", { replace: true });
+  }
   return (
     <div
       class="container"
@@ -19,27 +26,43 @@ const MyDigitals: Component = () => {
           type="search"
           value="Search......."
           id="example-search-input"
+          onChange={(e) => {
+            let filteredFiles = mappeduserFiles()?.filter((file) => {
+              if (file.tags.includes(e.currentTarget.value)) {
+                return file;
+              }
+            });
+            if (filteredFiles !== undefined) {
+              setMappedUserFiles(filteredFiles);
+            }
+          }}
           aria-describedby="basic-addon1"
         />
       </div>
-      <Show when={userFiles()?.length === 0}>
+      <Show
+        when={
+          mappeduserFiles()?.length === 0 || mappeduserFiles() === undefined
+        }
+      >
         <NothingToDisplay></NothingToDisplay>
       </Show>
       <div class="file-container container">
         {mapArray(
-          () => userFiles(),
+          () => mappeduserFiles(),
           (filesData) => (
-            <div class="file flex-column">
-              <a
-                class="nav-link hover-focus-active"
-                aria-current="page"
-                href={filesData.s3Url}
-              >
-                <div class="file-container" style={{ "font-size": "5rem" }}>
-                  <i class="bi bi-image-fill"></i>
-                </div>
-                {filesData.fileName}
-              </a>
+            <div class="row">
+              <div class="file flex-column">
+                <a
+                  class="nav-link hover-focus-active"
+                  aria-current="page"
+                  href={filesData.s3Url}
+                >
+                  <div class="file-container" style={{ "font-size": "5rem" }}>
+                    <i class="bi bi-image-fill"></i>
+                  </div>
+                  {filesData.fileName}
+                </a>
+              </div>
             </div>
           )
         )}
@@ -53,11 +76,13 @@ onMount(async () => {
   console.log(getUserDataResponse);
   const message = getUserDataResponse.message.toLowerCase();
   if (message.includes("expired") || message.includes("unauthorized")) {
-    console.log(getUserDataResponse);
+    setIsUnauthorized(true);
   } else {
+    setIsUnauthorized(false);
     setUserData(getUserDataResponse.data as UserData);
   }
   const response = await getUserFiles(userData()?.userId);
   setUserFiles(response);
+  setMappedUserFiles(response);
 });
 export default MyDigitals;
