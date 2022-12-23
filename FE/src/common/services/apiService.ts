@@ -28,7 +28,7 @@ export const createUserBucket = async (userId: string | undefined) => {
         Authorization: TOKEN,
         "X-Amz-Date": new Date().toUTCString(),
       },
-      method: "GET",
+      method: "POST",
     })
   ).json();
   return RESPONSE as ApiResponse;
