@@ -1,8 +1,9 @@
-import { Component, createSignal, onMount } from "solid-js";
+import { Component, Show, createSignal, mapArray, onMount } from "solid-js";
 import NothingToDisplay from "../common/nothing-to-display/NothingToDisplay";
-import { UserData } from "../common/models";
+import { UserData, UserFilesModel } from "../common/models";
 import { getUserData, getUserFiles } from "../common/services";
 const [userData, setUserData] = createSignal<UserData>();
+const [userFiles, setUserFiles] = createSignal<UserFilesModel[]>();
 const MyDigitals: Component = () => {
   return (
     <div
@@ -21,7 +22,28 @@ const MyDigitals: Component = () => {
           aria-describedby="basic-addon1"
         />
       </div>
-      <NothingToDisplay></NothingToDisplay>
+      <Show when={userFiles()?.length === 0}>
+        <NothingToDisplay></NothingToDisplay>
+      </Show>
+      <div class="file-container container">
+        {mapArray(
+          () => userFiles(),
+          (filesData) => (
+            <div class="file flex-column">
+              <a
+                class="nav-link hover-focus-active"
+                aria-current="page"
+                href={filesData.s3Url}
+              >
+                <div class="file-container" style={{ "font-size": "5rem" }}>
+                  <i class="bi bi-image-fill"></i>
+                </div>
+                {filesData.fileName}
+              </a>
+            </div>
+          )
+        )}
+      </div>
     </div>
   );
 };
@@ -35,6 +57,7 @@ onMount(async () => {
   } else {
     setUserData(getUserDataResponse.data as UserData);
   }
-  const response = getUserFiles(userData()?.userId);
+  const response = await getUserFiles(userData()?.userId);
+  setUserFiles(response);
 });
 export default MyDigitals;

@@ -1,4 +1,4 @@
-import { ApiResponse } from "../models/apiResponseModel";
+import { ApiResponse, UserFilesModel } from "../models";
 import { getToken } from "./tokenService";
 const BASE_URL =
   "https://dxe7tgo401.execute-api.ap-southeast-2.amazonaws.com/dev";
@@ -69,5 +69,7 @@ export const getUserFiles = async (userId: string | undefined) => {
     })
   ).json();
   console.log(RESPONSE);
-  return RESPONSE as ApiResponse;
+
+  const DATA = RESPONSE as ApiResponse;
+  return DATA.data["files"] as UserFilesModel[];
 };

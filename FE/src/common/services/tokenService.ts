@@ -4,10 +4,14 @@ const extractTokenFromUrl = async () => {
     .split("=")[1]
     .split("access_token")[0]
     .split("&")[0];
-  console.log(TOKEN);
+  document.cookie = `token=${TOKEN}`;
   return TOKEN;
 };
 
 export const getToken = async () => {
+  let token = document.cookie.split(";")[0].split("=")[1];
+  if (token !== null || token !== undefined) {
+    return token;
+  }
   return await extractTokenFromUrl();
 };
