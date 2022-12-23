@@ -1,6 +1,8 @@
-import { Component } from "solid-js";
+import { Component, createSignal, onMount } from "solid-js";
 import NothingToDisplay from "../common/nothing-to-display/NothingToDisplay";
-
+import { UserData } from "../common/models";
+import { getUserData, getUserFiles } from "../common/services";
+const [userData, setUserData] = createSignal<UserData>();
 const MyDigitals: Component = () => {
   return (
     <div
@@ -24,4 +26,15 @@ const MyDigitals: Component = () => {
   );
 };
 
+onMount(async () => {
+  let getUserDataResponse = await getUserData();
+  console.log(getUserDataResponse);
+  const message = getUserDataResponse.message.toLowerCase();
+  if (message.includes("expired") || message.includes("unauthorized")) {
+    console.log(getUserDataResponse);
+  } else {
+    setUserData(getUserDataResponse.data as UserData);
+  }
+  const response = getUserFiles(userData()?.userId);
+});
 export default MyDigitals;

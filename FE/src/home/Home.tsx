@@ -1,11 +1,7 @@
 import { Component, createSignal, mapArray, onMount } from "solid-js";
 import AppHeader from "../common/app-header/AppHeader";
-import { Outlet, useNavigate } from "@solidjs/router";
-import {
-  createUserBucket,
-  extractTokenFromUrl,
-  getUserData,
-} from "../common/services";
+import { Outlet } from "@solidjs/router";
+import { createUserBucket, getUserData } from "../common/services";
 import { UserData } from "../common/models";
 const [userData, setUserData] = createSignal<UserData>();
 const sideBarConfig = {
@@ -112,7 +108,6 @@ onMount(async () => {
   const message = getUserDataResponse.message.toLowerCase();
   if (message.includes("expired") || message.includes("unauthorized")) {
     console.log(getUserDataResponse);
-    //window.location.replace("http://localhost:3000/");
   } else {
     setUserData(getUserDataResponse.data as UserData);
   }
