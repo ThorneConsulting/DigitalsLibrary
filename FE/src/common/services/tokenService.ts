@@ -10,7 +10,8 @@ const extractTokenFromUrl = async () => {
 
 export const getToken = async () => {
   let token = document.cookie.split(";")[0].split("=")[1];
-  if (token !== null || token !== undefined) {
+  if (token !== null && token !== undefined) {
+    console.log(token);
     return token;
   }
   return await extractTokenFromUrl();

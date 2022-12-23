@@ -69,17 +69,15 @@ const UploadFiles: Component = () => {
 
 onMount(async () => {
   let getUserDataResponse = await getUserData();
-  console.log(getUserDataResponse);
   const message = getUserDataResponse.message.toLowerCase();
   if (message.includes("expired") || message.includes("unauthorized")) {
-    console.log(getUserDataResponse);
+    //Navigate to /Login
   } else {
     setUserData(getUserDataResponse.data as UserData);
   }
 });
 const toggelModal = () => {
   setIsModalOpen(!isModalOpen());
-  console.log(isModalOpen());
 };
 
 export default UploadFiles;
