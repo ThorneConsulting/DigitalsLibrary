@@ -56,4 +56,4 @@ jobs:
         run: aws s3 sync ./dist s3://my-digitals-fe --delete
 
       - name: Create Cloudfront invalidation
-        run: aws create-invalidation --distribution-id E3A2L3GHCXA8M7
+        run: aws cloudfront create-invalidation --distribution-id E3A2L3GHCXA8M7
