@@ -92,6 +92,7 @@ const headerConfig = () => {
 const HomePage: Component = () => {
   const navigate = useNavigate();
   if (isUnauthorized()) {
+    console.log("expired");
     navigate("/", { replace: true });
   }
   return (
@@ -109,9 +110,10 @@ const HomePage: Component = () => {
 
 onMount(async () => {
   let getUserDataResponse = await getUserData();
-  console.log(getUserDataResponse);
   const message = getUserDataResponse.message.toLowerCase();
+  console.log(message);
   if (message.includes("expired") || message.includes("unauthorized")) {
+    console.log("Here");
     setIsUnauthorized(true);
   } else {
     setIsUnauthorized(false);

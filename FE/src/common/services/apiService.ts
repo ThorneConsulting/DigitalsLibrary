@@ -68,8 +68,6 @@ export const getUserFiles = async (userId: string | undefined) => {
       method: "GET",
     })
   ).json();
-  console.log(RESPONSE);
-
   const DATA = RESPONSE as ApiResponse;
   return DATA.data["files"] as UserFilesModel[];
 };

@@ -28,12 +28,18 @@ const MyDigitals: Component = () => {
           id="example-search-input"
           onChange={(e) => {
             let filteredFiles = mappeduserFiles()?.filter((file) => {
-              if (file.tags.includes(e.currentTarget.value)) {
-                return file;
-              }
+              let filesToReturn: UserFilesModel[] = [];
+              file.tags.forEach((tag) => {
+                if (tag.toLowerCase() === e.currentTarget.value.toLowerCase()) {
+                  filesToReturn.push(file);
+                }
+              });
+              return filesToReturn;
             });
             if (filteredFiles !== undefined) {
               setMappedUserFiles(filteredFiles);
+            } else {
+              setMappedUserFiles(userFiles());
             }
           }}
           aria-describedby="basic-addon1"
@@ -73,7 +79,6 @@ const MyDigitals: Component = () => {
 
 onMount(async () => {
   let getUserDataResponse = await getUserData();
-  console.log(getUserDataResponse);
   const message = getUserDataResponse.message.toLowerCase();
   if (message.includes("expired") || message.includes("unauthorized")) {
     setIsUnauthorized(true);

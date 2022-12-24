@@ -15,7 +15,6 @@ const dropEvent = (e: Event) => {
 const inputChangeHandler = (e: Event) => {
   const inputElement = e.target as HTMLInputElement;
   const filesToUpload = inputElement.files;
-  console.log(filesToUpload);
   if (filesToUpload)
     for (let fileNumber = 0; fileNumber < filesToUpload.length; fileNumber++) {
       setFiles(filesToUpload.item(fileNumber));
@@ -23,7 +22,6 @@ const inputChangeHandler = (e: Event) => {
 };
 
 const uploadClickHandler = async () => {
-  console.log(files());
   await uploadFiles(userData()?.userId, files());
 };
 const modalContent = () => {
