@@ -30,9 +30,11 @@ const modalContent = () => {
 
 const UploadFiles: Component = () => {
   const navigate = useNavigate();
-  if (isUnauthorized()) {
-    navigate("/", { replace: true });
-  }
+  createEffect(() => {
+    if (isUnauthorized()) {
+      navigate("/", { replace: true });
+    }
+  });
   return (
     <div class="container-sm container-md container-lg d-flex justify-content-center align-items-center">
       <div

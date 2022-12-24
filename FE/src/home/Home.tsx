@@ -1,4 +1,10 @@
-import { Component, createSignal, mapArray, onMount } from "solid-js";
+import {
+  Component,
+  createEffect,
+  createSignal,
+  mapArray,
+  onMount,
+} from "solid-js";
 import AppHeader from "../common/app-header/AppHeader";
 import { Outlet, useNavigate } from "@solidjs/router";
 import { createUserBucket, getUserData } from "../common/services";
@@ -91,10 +97,11 @@ const headerConfig = () => {
 };
 const HomePage: Component = () => {
   const navigate = useNavigate();
-  if (isUnauthorized()) {
-    console.log("expired");
-    navigate("/", { replace: true });
-  }
+  createEffect(() => {
+    if (isUnauthorized()) {
+      navigate("/", { replace: true });
+    }
+  });
   return (
     <div
       class="container-sm container-md container-lg d-flex justify-content-center align-items-center"
@@ -111,9 +118,7 @@ const HomePage: Component = () => {
 onMount(async () => {
   let getUserDataResponse = await getUserData();
   const message = getUserDataResponse.message.toLowerCase();
-  console.log(message);
   if (message.includes("expired") || message.includes("unauthorized")) {
-    console.log("Here");
     setIsUnauthorized(true);
   } else {
     setIsUnauthorized(false);

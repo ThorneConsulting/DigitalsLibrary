@@ -1,4 +1,11 @@
-import { Component, Show, createSignal, mapArray, onMount } from "solid-js";
+import {
+  Component,
+  Show,
+  createEffect,
+  createSignal,
+  mapArray,
+  onMount,
+} from "solid-js";
 import NothingToDisplay from "../common/nothing-to-display/NothingToDisplay";
 import { UserData, UserFilesModel } from "../common/models";
 import { getUserData, getUserFiles } from "../common/services";
@@ -9,9 +16,11 @@ const [mappeduserFiles, setMappedUserFiles] = createSignal<UserFilesModel[]>();
 const [isUnauthorized, setIsUnauthorized] = createSignal<boolean>();
 const MyDigitals: Component = () => {
   const navigate = useNavigate();
-  if (isUnauthorized()) {
-    navigate("/", { replace: true });
-  }
+  createEffect(() => {
+    if (isUnauthorized()) {
+      navigate("/", { replace: true });
+    }
+  });
   return (
     <div
       class="container"
