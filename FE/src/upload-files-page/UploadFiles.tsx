@@ -1,4 +1,4 @@
-import { Component, createSignal, onMount } from "solid-js";
+import { Component, createEffect, createSignal, onMount } from "solid-js";
 import { getUserData, uploadFiles } from "../common/services";
 import { UserData } from "../common/models";
 import { useNavigate } from "@solidjs/router";

@@ -10,6 +10,7 @@ import NothingToDisplay from "../common/nothing-to-display/NothingToDisplay";
 import { UserData, UserFilesModel } from "../common/models";
 import { getUserData, getUserFiles } from "../common/services";
 import { useNavigate } from "@solidjs/router";
+import Loading from "../common/loading/Loading";
 const [userData, setUserData] = createSignal<UserData>();
 const [userFiles, setUserFiles] = createSignal<UserFilesModel[]>();
 const [mappeduserFiles, setMappedUserFiles] = createSignal<UserFilesModel[]>();
@@ -54,33 +55,34 @@ const MyDigitals: Component = () => {
           aria-describedby="basic-addon1"
         />
       </div>
-      <Show
-        when={
-          mappeduserFiles()?.length === 0 || mappeduserFiles() === undefined
-        }
-      >
+      <Show when={mappeduserFiles()?.length === 0}>
         <NothingToDisplay></NothingToDisplay>
       </Show>
+      <Show when={mappeduserFiles() === undefined}>
+        <Loading></Loading>
+      </Show>
       <div class="file-container container">
-        {mapArray(
-          () => mappeduserFiles(),
-          (filesData) => (
-            <div class="row">
-              <div class="file flex-column">
-                <a
-                  class="nav-link hover-focus-active"
-                  aria-current="page"
-                  href={filesData.s3Url}
-                >
-                  <div class="file-container" style={{ "font-size": "5rem" }}>
-                    <i class="bi bi-image-fill"></i>
-                  </div>
-                  {filesData.fileName}
-                </a>
+        <div class="row">
+          {mapArray(
+            () => mappeduserFiles(),
+            (filesData) => (
+              <div class="col-3">
+                <div class="file flex-column">
+                  <a
+                    class="nav-link hover-focus-active"
+                    aria-current="page"
+                    href={filesData.s3Url}
+                  >
+                    <div class="file-container" style={{ "font-size": "5rem" }}>
+                      <i class="bi bi-image-fill"></i>
+                    </div>
+                    {filesData.fileName}
+                  </a>
+                </div>
               </div>
-            </div>
-          )
-        )}
+            )
+          )}
+        </div>
       </div>
     </div>
   );
