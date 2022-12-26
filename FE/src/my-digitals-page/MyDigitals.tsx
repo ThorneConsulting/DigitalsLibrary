@@ -37,18 +37,24 @@ const MyDigitals: Component = () => {
           value="Search......."
           id="example-search-input"
           onChange={(e) => {
-            let filesToReturn: UserFilesModel[] = [];
-            mappeduserFiles()?.forEach((file) => {
-              file.tags.forEach((tag) => {
-                if (tag.toLowerCase() === e.currentTarget.value.toLowerCase()) {
-                  filesToReturn.push(file);
-                }
-              });
-            });
-            if (filesToReturn !== undefined) {
-              setMappedUserFiles(filesToReturn);
-            } else {
+            if (e.currentTarget.value.toLowerCase().trim() === "") {
               setMappedUserFiles(userFiles());
+            } else {
+              let filesToReturn: UserFilesModel[] = [];
+              mappeduserFiles()?.forEach((file) => {
+                file.tags.forEach((tag) => {
+                  if (
+                    tag.toLowerCase() === e.currentTarget.value.toLowerCase()
+                  ) {
+                    filesToReturn.push(file);
+                  }
+                });
+              });
+              if (filesToReturn !== undefined) {
+                setMappedUserFiles(filesToReturn);
+              } else {
+                setMappedUserFiles(userFiles());
+              }
             }
           }}
           aria-describedby="basic-addon1"
