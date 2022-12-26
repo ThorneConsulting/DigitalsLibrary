@@ -9,7 +9,13 @@ const Loading: Component = () => {
         width: "100%",
       }}
     >
-      <h2>Loading.........</h2>
+      <div
+        class="spinner-border text-primary"
+        style="width: 3rem; height: 3rem;"
+        role="status"
+      >
+        <span class="visually-hidden">Loading...</span>
+      </div>
     </div>
   );
 };
