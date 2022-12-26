@@ -1,5 +1,6 @@
 import {
   Component,
+  For,
   Show,
   createEffect,
   createSignal,
@@ -15,6 +16,7 @@ const [userData, setUserData] = createSignal<UserData>();
 const [userFiles, setUserFiles] = createSignal<UserFilesModel[]>();
 const [mappeduserFiles, setMappedUserFiles] = createSignal<UserFilesModel[]>();
 const [isUnauthorized, setIsUnauthorized] = createSignal<boolean>();
+const [searchInput, setSearchInput] = createSignal<string>();
 const MyDigitals: Component = () => {
   const navigate = useNavigate();
   createEffect(() => {
@@ -37,15 +39,14 @@ const MyDigitals: Component = () => {
           value="Search......."
           id="example-search-input"
           onChange={(e) => {
-            if (e.currentTarget.value.toLowerCase().trim() === "") {
+            setSearchInput(e.currentTarget.value.toLowerCase());
+            if (searchInput()?.trim() === "") {
               setMappedUserFiles(userFiles());
             } else {
               let filesToReturn: UserFilesModel[] = [];
               mappeduserFiles()?.forEach((file) => {
                 file.tags.forEach((tag) => {
-                  if (
-                    tag.toLowerCase() === e.currentTarget.value.toLowerCase()
-                  ) {
+                  if (tag.toLowerCase() === searchInput()) {
                     filesToReturn.push(file);
                   }
                 });
@@ -59,6 +60,19 @@ const MyDigitals: Component = () => {
           }}
           aria-describedby="basic-addon1"
         />
+      </div>
+      <div class="tag-container d-flex mt-2">
+        <For each={mappeduserFiles()}>
+          {(userFiles, i) => (
+            <For each={userFiles.tags}>
+              {(tag, i) => (
+                <div class="tag-wrapper" style={{ padding: "0.1rem" }}>
+                  <span class="badge rounded-pill bg-primary">{tag}</span>
+                </div>
+              )}
+            </For>
+          )}
+        </For>
       </div>
       <Show when={mappeduserFiles()?.length === 0}>
         <NothingToDisplay></NothingToDisplay>
