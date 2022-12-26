@@ -37,17 +37,16 @@ const MyDigitals: Component = () => {
           value="Search......."
           id="example-search-input"
           onChange={(e) => {
-            let filteredFiles = mappeduserFiles()?.filter((file) => {
-              let filesToReturn: UserFilesModel[] = [];
+            let filesToReturn: UserFilesModel[] = [];
+            mappeduserFiles()?.forEach((file) => {
               file.tags.forEach((tag) => {
                 if (tag.toLowerCase() === e.currentTarget.value.toLowerCase()) {
                   filesToReturn.push(file);
                 }
               });
-              return filesToReturn;
             });
-            if (filteredFiles !== undefined) {
-              setMappedUserFiles(filteredFiles);
+            if (filesToReturn !== undefined) {
+              setMappedUserFiles(filesToReturn);
             } else {
               setMappedUserFiles(userFiles());
             }
