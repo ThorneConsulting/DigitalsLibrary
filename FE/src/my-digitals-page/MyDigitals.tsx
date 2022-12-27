@@ -23,6 +23,9 @@ const MyDigitals: Component = () => {
     if (isUnauthorized()) {
       navigate("/", { replace: true });
     }
+    if (mappeduserFiles() === undefined) {
+      setMappedUserFiles([]);
+    }
   });
   return (
     <div
@@ -61,7 +64,7 @@ const MyDigitals: Component = () => {
           aria-describedby="basic-addon1"
         />
       </div>
-      <div class="tag-container d-flex mt-2">
+      <div class="tag-container d-flex mt-2" style={{ "flex-wrap": "wrap" }}>
         <For each={mappeduserFiles()}>
           {(userFiles, i) => (
             <For each={userFiles.tags}>

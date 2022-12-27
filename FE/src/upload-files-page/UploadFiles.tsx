@@ -1,11 +1,13 @@
-import { Component, createEffect, createSignal, onMount } from "solid-js";
+import { Component, Show, createEffect, createSignal, onMount } from "solid-js";
 import { getUserData, uploadFiles } from "../common/services";
 import { UserData } from "../common/models";
 import { useNavigate } from "@solidjs/router";
+import LoadingButton from "../common/loading-botton/LoadingButton";
 const [isModalOpen, setIsModalOpen] = createSignal(false);
 const [files, setFiles] = createSignal();
 const [userData, setUserData] = createSignal<UserData>();
 const [isUnauthorized, setIsUnauthorized] = createSignal<boolean>();
+const [isLoading, setIsLoading] = createSignal<boolean>();
 const closeModal = () => {
   setIsModalOpen(false);
 };
@@ -22,7 +24,8 @@ const inputChangeHandler = (e: Event) => {
 };
 
 const uploadClickHandler = async () => {
-  await uploadFiles(userData()?.userId, files());
+  setIsLoading(true);
+  uploadFiles(userData()?.userId, files()).finally(() => setIsLoading(false));
 };
 const modalContent = () => {
   return (<div></div>) as HTMLElement;
@@ -60,13 +63,18 @@ const UploadFiles: Component = () => {
           Choose a file"
           />
         </div>
-        <button
-          type="button"
-          class="btn btn-primary"
-          onClick={uploadClickHandler}
-        >
-          Upload
-        </button>
+        <Show when={!isLoading()}>
+          <button
+            type="button"
+            class="btn btn-primary"
+            onClick={uploadClickHandler}
+          >
+            Upload
+          </button>
+        </Show>
+        <Show when={isLoading()}>
+          <LoadingButton buttonLabel="Uploading...."></LoadingButton>
+        </Show>
         <br />
       </div>
     </div>
@@ -75,7 +83,6 @@ const UploadFiles: Component = () => {
 
 onMount(async () => {
   let getUserDataResponse = await getUserData();
-  console.log(getUserDataResponse);
   const message = getUserDataResponse.message.toLowerCase();
   if (message.includes("expired") || message.includes("unauthorized")) {
     setIsUnauthorized(true);
