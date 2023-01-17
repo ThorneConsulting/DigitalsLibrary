@@ -42,9 +42,7 @@ export const createResponseAsync = async (
 
 export const getHashAsync = async (data: Buffer) => {
   const CRYPTO = require("crypto");
-  const HASH_SUM = CRYPTO.createHash("sha256");
-  HASH_SUM.update(data);
-  const HEX_VALUE = HASH_SUM.digest("hex");
+  const HEX_VALUE = CRYPTO.createHash("md5").update(data).digest("hex");
   console.log("HEX_VALUE", HEX_VALUE);
   return HEX_VALUE;
 };
