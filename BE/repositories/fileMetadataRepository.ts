@@ -25,7 +25,6 @@ export const insertUserFileRecordAsync = async (
   tags: (string | undefined)[] | undefined
 ) => {
   const USER_RECORD = await getUserFileRecordAsync(userId);
-  console.log(JSON.stringify(USER_RECORD));
   let EXISTING_FILES: DynamoRecord[] = [];
   if (Array.isArray(USER_RECORD.files)) {
     EXISTING_FILES = USER_RECORD.files;
@@ -40,13 +39,9 @@ export const insertUserFileRecordAsync = async (
       ];
     }
   }
-  console.log(...EXISTING_FILES);
   const FILES = [...EXISTING_FILES];
   const doesFileAlreadyExist =
     FILES.filter((file) => file.fileName === fileName).length > 0;
-  console.log("Already Existing", doesFileAlreadyExist);
-  console.log(...FILES.filter((file) => file.fileName === fileName));
-  console.log("File name", fileName);
   if (!doesFileAlreadyExist) {
     FILES.push({
       fileName: fileName,

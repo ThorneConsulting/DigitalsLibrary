@@ -5,9 +5,7 @@ import { createResponseAsync } from "../utils";
 
 export const getUserDataAsync = async (event: APIGatewayEvent) => {
   const AUTH_TOKEN = event.headers.Authorization;
-  console.log("AUTH_TOKEN", AUTH_TOKEN);
   const RESULT = await decryptJwtAsync(AUTH_TOKEN);
-  console.log("RESULT", RESULT);
   if (RESULT == null) {
     return await createResponseAsync(
       {},

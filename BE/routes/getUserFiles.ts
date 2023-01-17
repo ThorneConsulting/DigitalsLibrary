@@ -17,8 +17,6 @@ export const getUserFilesAsync = async (event: APIGatewayEvent) => {
   try {
     const RESULT = await getUserFileRecordAsync(USER_ID);
 
-    console.log("Found Item", RESULT);
-
     RESPONSE = await createResponseAsync(RESULT, GENERIC_SUCCESS);
   } catch (error: any) {
     console.error("Failed to get record");
@@ -32,6 +30,5 @@ export const getUserFilesAsync = async (event: APIGatewayEvent) => {
 
     RESPONSE = await createResponseAsync(ERROR, GENERIC_ERROR);
   }
-  console.log(RESPONSE);
   return RESPONSE;
 };

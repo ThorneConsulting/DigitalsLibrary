@@ -26,9 +26,10 @@ export const uploadUserFileAsync = async (event: APIGatewayEvent) => {
   try {
     const FORM_DATA = parse(event, true);
     const FILE = FORM_DATA.file as FileData;
-    console.log("FORM_DATA", FORM_DATA);
+    const fileBuffer = Buffer.from(FILE.content);
+    console.log("BUFFER", fileBuffer);
     //Insert Hash record
-    const HASH = await getHashAsync(FILE.content.toString());
+    const HASH = await getHashAsync(fileBuffer);
     const INSERT_HASH_RECORD_RESULT = await insertFileHashRecordAsync(
       HASH,
       USER_ID
@@ -40,14 +41,12 @@ export const uploadUserFileAsync = async (event: APIGatewayEvent) => {
       FILE.content
     );
     const IMAGE_LABELS = await getLabelsAsync(USER_ID, FILE.filename);
-    console.log("Labels for image", IMAGE_LABELS);
     //Create record in dynamo
     const INSERT_RECORD_RESULT = await insertUserFileRecordAsync(
       USER_ID,
       FILE.filename,
       IMAGE_LABELS
     );
-    console.log("Created Item", INSERT_RECORD_RESULT);
     RESPONSE = await createResponseAsync(INSERT_RECORD_RESULT, GENERIC_SUCCESS);
   } catch (error: any) {
     console.error("Failed to get record");

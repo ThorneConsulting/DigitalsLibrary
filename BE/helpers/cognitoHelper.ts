@@ -44,12 +44,10 @@ export const decryptJwtAsync = async (authToken: string | undefined) => {
       tokenUse: "id",
       clientId: COGNITO.clientId,
     });
-    console.log("VERIFIER", verifier);
     const payload = await verifier.verify(
       authToken, // the JWT as string,
       { tokenUse: "id", clientId: COGNITO.clientId }
     );
-    console.log("PAYLOAD", payload);
     return {
       userId: payload.sub,
       userName: payload["cognito:username"],
