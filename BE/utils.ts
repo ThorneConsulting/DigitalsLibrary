@@ -40,11 +40,13 @@ export const createResponseAsync = async (
   return RESPONSE;
 };
 
-export const getHashAsync = async (data: string | Buffer) => {
+export const getHashAsync = async (data: string) => {
+  console.log("HASH_DATA", data);
   const CRYPTO = require("crypto");
   const HASH_SUM = CRYPTO.createHash("sha256");
   HASH_SUM.update(data);
   const HEX_VALUE = HASH_SUM.digest("hex");
+  console.log("HEX", HEX_VALUE);
   return HEX_VALUE;
 };
 

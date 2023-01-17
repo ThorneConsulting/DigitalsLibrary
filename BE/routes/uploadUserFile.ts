@@ -28,7 +28,7 @@ export const uploadUserFileAsync = async (event: APIGatewayEvent) => {
     const FILE = FORM_DATA.file as FileData;
     console.log("FORM_DATA", FORM_DATA);
     //Insert Hash record
-    const HASH = await getHashAsync(FILE.content);
+    const HASH = await getHashAsync(FILE.content.toString());
     const INSERT_HASH_RECORD_RESULT = await insertFileHashRecordAsync(
       HASH,
       USER_ID
