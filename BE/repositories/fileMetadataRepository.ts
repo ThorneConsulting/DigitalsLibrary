@@ -43,7 +43,7 @@ export const insertUserFileRecordAsync = async (
   console.log(...EXISTING_FILES);
   const FILES = [...EXISTING_FILES];
   const doesFileAlreadyExist =
-    FILES.filter((file) => file.fileName === fileName).length > 1;
+    FILES.filter((file) => file.fileName === fileName).length > 0;
   console.log("Already Existing", doesFileAlreadyExist);
   console.log(...FILES.filter((file) => file.fileName === fileName));
   console.log("File name", fileName);
