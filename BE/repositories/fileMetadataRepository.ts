@@ -41,21 +41,28 @@ export const insertUserFileRecordAsync = async (
     }
   }
   const FILES = [...EXISTING_FILES];
-  FILES.push({
-    fileName: fileName,
-    tags: tags,
-    s3Url: await getS3UrlForFileAsync(userId, fileName),
-  });
-  const PARAMS = {
-    TableName: TABLE_NAME,
-    Item: marshall({
-      userId: userId,
-      files: FILES,
-    }),
-  };
+  const doesFileAlreadyExist =
+    FILES.filter((file) => file.fileName === fileName).length > 1;
+  if (!doesFileAlreadyExist) {
+    FILES.push({
+      fileName: fileName,
+      tags: tags,
+      s3Url: await getS3UrlForFileAsync(userId, fileName),
+    });
+    const PARAMS = {
+      TableName: TABLE_NAME,
+      Item: marshall({
+        userId: userId,
+        files: FILES,
+      }),
+    };
 
-  const { Attributes } = await CLIENT.send(new PutItemCommand(PARAMS));
+    const { Attributes } = await CLIENT.send(new PutItemCommand(PARAMS));
 
-  const RESULT = Attributes ? unmarshall(Attributes) : {};
-  return RESULT;
+    const RESULT = Attributes ? unmarshall(Attributes) : {};
+    return RESULT;
+  } else {
+    const RESULT = await getUserFileRecordAsync(userId);
+    return RESULT;
+  }
 };
