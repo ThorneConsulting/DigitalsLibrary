@@ -42,9 +42,7 @@ export const createResponseAsync = async (
 };
 
 export const getHashAsync = async (data: Buffer) => {
-  const HEX_VALUE = CRYPTO.createHmac("sha256", data)
-    .update(data)
-    .digest("hex");
+  const HEX_VALUE = CRYPTO.createHmac("sha256", data).digest("hex");
   console.log("HEX_VALUE", HEX_VALUE);
   return HEX_VALUE;
 };

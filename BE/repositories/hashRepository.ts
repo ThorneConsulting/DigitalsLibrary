@@ -1,9 +1,9 @@
-const {
+import {
   DynamoDBClient,
   GetItemCommand,
   PutItemCommand,
-} = require("@aws-sdk/client-dynamodb");
-const { marshall, unmarshall } = require("@aws-sdk/util-dynamodb");
+} from "@aws-sdk/client-dynamodb";
+import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 
 const CLIENT = new DynamoDBClient({});
 const TABLE_NAME = process.env.DYNAMO_DB_HASH_TABLE_NAME;
