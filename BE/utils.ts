@@ -2,6 +2,7 @@ import { APIGatewayEvent } from "aws-lambda";
 import { BAD_REQUEST, GENERIC_SUCCESS, UNAUTHORIZED } from "./config";
 import { verifyValidUserIdAsync } from "./helpers";
 import { ApiResponse } from "./models";
+import * as CRYPTO from "crypto";
 
 export const createResponseAsync = async (
   data: any,
@@ -41,8 +42,9 @@ export const createResponseAsync = async (
 };
 
 export const getHashAsync = async (data: Buffer) => {
-  const CRYPTO = require("crypto");
-  const HEX_VALUE = CRYPTO.createHash("md5").update(data).digest("hex");
+  const HEX_VALUE = CRYPTO.createHmac("sha256", data)
+    .update(data)
+    .digest("hex");
   console.log("HEX_VALUE", HEX_VALUE);
   return HEX_VALUE;
 };
