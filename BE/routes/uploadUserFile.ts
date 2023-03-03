@@ -2,11 +2,7 @@ import {
   insertFileHashRecordAsync,
   insertUserFileRecordAsync,
 } from "../repositories";
-import {
-  applyCommonValidationsAsync,
-  createResponseAsync,
-  getHashAsync,
-} from "../utils";
+import { applyCommonValidationsAsync, createResponseAsync } from "../utils";
 import { uploadFileAsync, getLabelsAsync } from "../helpers";
 import { parse } from "aws-multipart-parser";
 import { FileData } from "aws-multipart-parser/dist/models";
@@ -26,19 +22,18 @@ export const uploadUserFileAsync = async (event: APIGatewayEvent) => {
   try {
     const FORM_DATA = parse(event, true);
     const FILE = FORM_DATA.file as FileData;
-    const fileBuffer = Buffer.from(FILE.content);
-    console.log("BUFFER", fileBuffer);
-    //Insert Hash record
-    const HASH = await getHashAsync(fileBuffer);
-    const INSERT_HASH_RECORD_RESULT = await insertFileHashRecordAsync(
-      HASH,
-      USER_ID
-    );
     //Upload file to S3
     const S3_UPLOAD_RESULT = await uploadFileAsync(
       USER_ID,
       FILE.filename,
       FILE.content
+    );
+    if (S3_UPLOAD_RESULT === undefined) {
+      throw new Error("Something went wrong with uploading object");
+    }
+    const INSERT_HASH_RECORD_RESULT = await insertFileHashRecordAsync(
+      S3_UPLOAD_RESULT,
+      USER_ID
     );
     const IMAGE_LABELS = await getLabelsAsync(USER_ID, FILE.filename);
     //Create record in dynamo

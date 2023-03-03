@@ -3,7 +3,7 @@ import { BAD_REQUEST, GENERIC_SUCCESS, UNAUTHORIZED } from "./config";
 import { verifyValidUserIdAsync } from "./helpers";
 import { ApiResponse } from "./models";
 import * as CRYPTO from "crypto";
-
+import fs from "fs";
 export const createResponseAsync = async (
   data: any,
   responseObject: ApiResponse,

@@ -3,8 +3,8 @@ import {
   CreateBucketCommand,
   HeadBucketCommand,
   CreateBucketCommandInput,
+  PutObjectCommand,
 } from "@aws-sdk/client-s3";
-import { Upload } from "@aws-sdk/lib-storage";
 const CLIENT = new S3Client({});
 
 export const uploadFileAsync = async (
@@ -12,18 +12,14 @@ export const uploadFileAsync = async (
   fileName: string,
   fileContent: Buffer | string
 ) => {
-  const UPLOAD = new Upload({
-    client: CLIENT,
-    params: {
-      Bucket: bucketName,
-      Key: fileName,
-      Body: fileContent,
-    },
+  const command = new PutObjectCommand({
+    Bucket: bucketName,
+    Key: fileName,
+    Body: fileContent,
   });
-  UPLOAD.on("httpUploadProgress", (progress) => {
-    console.log(progress);
-  });
-  return await UPLOAD.done();
+  const RESULT = await CLIENT.send(command);
+
+  return RESULT.ETag;
 };
 
 export const createBUcketIfNotExistsAsync = async (bucketName: string) => {
