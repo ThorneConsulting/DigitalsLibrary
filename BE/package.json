@@ -23,8 +23,10 @@
     "@aws-sdk/client-s3": "^3.131.0",
     "@aws-sdk/lib-storage": "^3.131.0",
     "@aws-sdk/util-dynamodb": "^3.131.0",
+    "@types/crypto-js": "^4.1.1",
     "aws-jwt-verify": "^3.1.0",
-    "aws-multipart-parser": "^0.2.1"
+    "aws-multipart-parser": "^0.2.1",
+    "crypto-js": "^4.1.1"
   },
   "devDependencies": {
     "@types/node": "^18.7.16",

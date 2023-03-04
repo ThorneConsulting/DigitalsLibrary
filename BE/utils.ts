@@ -2,8 +2,8 @@ import { APIGatewayEvent } from "aws-lambda";
 import { BAD_REQUEST, GENERIC_SUCCESS, UNAUTHORIZED } from "./config";
 import { verifyValidUserIdAsync } from "./helpers";
 import { ApiResponse } from "./models";
-import * as CRYPTO from "crypto";
-import fs from "fs";
+import sha256 from "crypto-js/sha256";
+import Base64 from "crypto-js/enc-base64";
 export const createResponseAsync = async (
   data: any,
   responseObject: ApiResponse,
@@ -41,8 +41,8 @@ export const createResponseAsync = async (
   return RESPONSE;
 };
 
-export const getHashAsync = async (data: Buffer) => {
-  const HEX_VALUE = CRYPTO.createHmac("sha256", data).digest("hex");
+export const getHashAsync = async (data: string) => {
+  const HEX_VALUE = Base64.stringify(sha256(data));
   console.log("HEX_VALUE", HEX_VALUE);
   return HEX_VALUE;
 };
