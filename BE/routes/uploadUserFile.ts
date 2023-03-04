@@ -20,12 +20,16 @@ export const uploadUserFileAsync = async (event: APIGatewayEvent) => {
   }
   let RESPONSE;
   try {
-    const FORM_DATA = parse(event, true);
-    const FILE = FORM_DATA.file as FileData;
+    const HASH_VALUE = event.pathParameters?.fileHashValue;
+    if (HASH_VALUE === undefined) {
+      throw new Error("Something went wrong with uploading object");
+    }
     const INSERT_HASH_RECORD_RESULT = await insertFileHashRecordAsync(
-      FORM_DATA.hash.toString(),
+      HASH_VALUE,
       USER_ID
     );
+    const FORM_DATA = parse(event, true);
+    const FILE = FORM_DATA.file as FileData;
     //Upload file to S3
     const S3_UPLOAD_RESULT = await uploadFileAsync(
       USER_ID,
