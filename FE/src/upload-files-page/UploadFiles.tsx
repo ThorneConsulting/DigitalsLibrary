@@ -3,8 +3,11 @@ import { getUserData, uploadFiles } from "../common/services";
 import { UserData } from "../common/models";
 import { useNavigate } from "@solidjs/router";
 import LoadingButton from "../common/loading-botton/LoadingButton";
+import sha256 from "crypto-js/sha256";
+import Base64 from "crypto-js/enc-base64";
+
 const [isModalOpen, setIsModalOpen] = createSignal(false);
-const [files, setFiles] = createSignal();
+const [files, setFiles] = createSignal<File | null>();
 const [userData, setUserData] = createSignal<UserData>();
 const [isUnauthorized, setIsUnauthorized] = createSignal<boolean>();
 const [isLoading, setIsLoading] = createSignal<boolean>();
@@ -25,7 +28,14 @@ const inputChangeHandler = (e: Event) => {
 
 const uploadClickHandler = async () => {
   setIsLoading(true);
-  uploadFiles(userData()?.userId, files()).finally(() => setIsLoading(false));
+  files()
+    ?.arrayBuffer()
+    .then((value) => {
+      const HEX_VALUE = Base64.stringify(sha256(value.toString()));
+      uploadFiles(userData()?.userId, files(), HEX_VALUE).finally(() =>
+        setIsLoading(false)
+      );
+    });
 };
 const modalContent = () => {
   return (<div></div>) as HTMLElement;

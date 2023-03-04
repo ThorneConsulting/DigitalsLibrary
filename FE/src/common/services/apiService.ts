@@ -35,7 +35,8 @@ export const createUserBucket = async (userId: string | undefined) => {
 
 export const uploadFiles = async (
   userId: string | undefined,
-  fileToUpload: any
+  fileToUpload: any,
+  fileHash: string
 ) => {
   if (userId === undefined) {
     throw new Error("UserId cannot be undefined");
@@ -44,6 +45,7 @@ export const uploadFiles = async (
   let data = new FormData();
   data.append("name", "Image Upload");
   data.append("file", fileToUpload);
+  data.append("hash", fileHash);
   const RESPONSE = await (
     await fetch(`${BASE_URL}${PATH}`, {
       headers: {

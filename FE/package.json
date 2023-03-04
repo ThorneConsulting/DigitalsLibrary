@@ -19,6 +19,8 @@
   },
   "dependencies": {
     "@solidjs/router": "^0.4.3",
+    "@types/crypto-js": "^4.1.1",
+    "crypto-js": "^4.1.1",
     "solid-js": "^1.4.2"
   }
 }

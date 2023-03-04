@@ -2,11 +2,7 @@ import {
   insertFileHashRecordAsync,
   insertUserFileRecordAsync,
 } from "../repositories";
-import {
-  applyCommonValidationsAsync,
-  createResponseAsync,
-  getHashAsync,
-} from "../utils";
+import { applyCommonValidationsAsync, createResponseAsync } from "../utils";
 import { uploadFileAsync, getLabelsAsync } from "../helpers";
 import { parse } from "aws-multipart-parser";
 import { FileData } from "aws-multipart-parser/dist/models";
@@ -26,9 +22,8 @@ export const uploadUserFileAsync = async (event: APIGatewayEvent) => {
   try {
     const FORM_DATA = parse(event, true);
     const FILE = FORM_DATA.file as FileData;
-    const FILE_HASH = await getHashAsync(FILE.content.toString());
     const INSERT_HASH_RECORD_RESULT = await insertFileHashRecordAsync(
-      FILE_HASH,
+      FORM_DATA.hash.toString(),
       USER_ID
     );
     //Upload file to S3
