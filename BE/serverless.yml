@@ -33,7 +33,7 @@ functions:
     timeout: 20 # seconds
     events:
       - http:
-          path: /users/{userId}/files/{fileHashValue}
+          path: /users/{userId}/files
           method: GET
           authorizer:
             type: COGNITO_USER_POOLS
@@ -70,7 +70,7 @@ functions:
     timeout: 30 # seconds
     events:
       - http:
-          path: /users/{userId}/file
+          path: /users/{userId}/file/{fileHashValue}
           method: POST
           authorizer:
             type: COGNITO_USER_POOLS
