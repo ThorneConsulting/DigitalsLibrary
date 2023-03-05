@@ -1,4 +1,3 @@
-import { hashValue } from "solid-js/types/reactive/signal";
 import { ApiResponse, UserFilesModel } from "../models";
 import { getToken } from "./tokenService";
 const BASE_URL =
@@ -42,7 +41,7 @@ export const uploadFiles = async (
   if (userId === undefined) {
     throw new Error("UserId cannot be undefined");
   }
-  const PATH = `/users/${userId}/file/${hashValue}`;
+  const PATH = `/users/${userId}/file/${fileHash}`;
   let data = new FormData();
   data.append("name", "Image Upload");
   data.append("file", fileToUpload);
