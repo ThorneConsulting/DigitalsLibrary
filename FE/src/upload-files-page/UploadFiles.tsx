@@ -7,7 +7,7 @@ import sha256 from "crypto-js/sha256";
 import Base64 from "crypto-js/enc-base64";
 
 const [isModalOpen, setIsModalOpen] = createSignal(false);
-const [files, setFiles] = createSignal<File | null>();
+const [files, setFiles] = createSignal<File>();
 const [userData, setUserData] = createSignal<UserData>();
 const [isUnauthorized, setIsUnauthorized] = createSignal<boolean>();
 const [isLoading, setIsLoading] = createSignal<boolean>();
@@ -20,22 +20,29 @@ const dropEvent = (e: Event) => {
 const inputChangeHandler = (e: Event) => {
   const inputElement = e.target as HTMLInputElement;
   const filesToUpload = inputElement.files;
-  if (filesToUpload)
+  if (filesToUpload && filesToUpload.length > 0)
     for (let fileNumber = 0; fileNumber < filesToUpload.length; fileNumber++) {
-      setFiles(filesToUpload.item(fileNumber));
+      setFiles(filesToUpload[fileNumber]);
     }
 };
 
 const uploadClickHandler = async () => {
   setIsLoading(true);
-  files()
-    ?.arrayBuffer()
-    .then((value) => {
-      const HEX_VALUE = Base64.stringify(sha256(value.toString()));
+  const READER = new FileReader();
+  READER.readAsText(files() as Blob);
+  let hashString: string;
+  READER.onloadend = (event) => {
+    if (event.target?.readyState === FileReader.DONE) {
+      hashString = READER.result?.valueOf().toString() ?? "";
+      const HEX_VALUE = Base64.stringify(sha256(hashString));
       uploadFiles(userData()?.userId, files(), HEX_VALUE).finally(() =>
         setIsLoading(false)
       );
-    });
+    }
+  };
+  READER.onerror = (event) => {
+    console.log("ERROR", event);
+  };
 };
 const modalContent = () => {
   return (<div></div>) as HTMLElement;
