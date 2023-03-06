@@ -41,7 +41,7 @@ export const uploadFiles = async (
   if (userId === undefined) {
     throw new Error("UserId cannot be undefined");
   }
-  const PATH = `/users/${userId}/file/${fileHash}`;
+  const PATH = `/users/${userId}/file`;
   let data = new FormData();
   data.append("name", "Image Upload");
   data.append("file", fileToUpload);
@@ -51,6 +51,7 @@ export const uploadFiles = async (
         Authorization: TOKEN,
         "X-Amz-Date": new Date().toUTCString(),
         "Content-Type": "multipart/form-data",
+        "File-Hash": fileHash,
       },
       body: data,
       method: "POST",

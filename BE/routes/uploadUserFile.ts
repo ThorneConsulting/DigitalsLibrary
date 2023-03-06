@@ -20,7 +20,7 @@ export const uploadUserFileAsync = async (event: APIGatewayEvent) => {
   }
   let RESPONSE;
   try {
-    const HASH_VALUE = event.pathParameters?.fileHashValue;
+    const HASH_VALUE = event.headers["File-Hash"];
     if (HASH_VALUE === undefined) {
       throw new Error("Something went wrong with uploading object");
     }
