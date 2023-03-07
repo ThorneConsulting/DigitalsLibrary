@@ -43,15 +43,14 @@ export const uploadFiles = async (
   }
   const PATH = `/users/${userId}/file`;
   let data = new FormData();
-  data.append("name", "Image Upload");
   data.append("file", fileToUpload);
+  data.append("fileHash", fileHash);
   const RESPONSE = await (
     await fetch(`${BASE_URL}${PATH}`, {
       headers: {
         Authorization: TOKEN,
         "X-Amz-Date": new Date().toUTCString(),
         "Content-Type": "multipart/form-data",
-        "File-Hash": fileHash,
       },
       body: data,
       method: "POST",

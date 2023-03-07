@@ -20,16 +20,17 @@ export const uploadUserFileAsync = async (event: APIGatewayEvent) => {
   }
   let RESPONSE;
   try {
-    const HASH_VALUE = event.headers["file-hash"];
+    const FORM_DATA = parse(event, true);
+    const HASH_VALUE = FORM_DATA.fileHash as string;
     if (HASH_VALUE === undefined) {
       console.log(HASH_VALUE);
-      throw new Error("Cant get hash from headers");
+      throw new Error(`Cant get hash from headers ${HASH_VALUE}`);
     }
     const INSERT_HASH_RECORD_RESULT = await insertFileHashRecordAsync(
       HASH_VALUE,
       USER_ID
     );
-    const FORM_DATA = parse(event, true);
+
     const FILE = FORM_DATA.file as FileData;
     //Upload file to S3
     const S3_UPLOAD_RESULT = await uploadFileAsync(
