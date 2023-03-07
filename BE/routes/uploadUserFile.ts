@@ -23,8 +23,8 @@ export const uploadUserFileAsync = async (event: APIGatewayEvent) => {
     const FORM_DATA = parse(event, true);
     const HASH_VALUE = FORM_DATA.fileHash as string;
     if (HASH_VALUE === undefined) {
-      console.log(HASH_VALUE);
-      throw new Error(`Cant get hash from headers ${HASH_VALUE}`);
+      console.log(FORM_DATA);
+      throw new Error(`Cant get hash from headers ${FORM_DATA}`);
     }
     const INSERT_HASH_RECORD_RESULT = await insertFileHashRecordAsync(
       HASH_VALUE,
