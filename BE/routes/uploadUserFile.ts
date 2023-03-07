@@ -21,9 +21,8 @@ export const uploadUserFileAsync = async (event: APIGatewayEvent) => {
   let RESPONSE;
   try {
     const FORM_DATA = parse(event, true);
-    const HASH_VALUE = event.body as string;
-    const bodyToParse = event.body ?? "";
-    console.log(JSON.parse(bodyToParse));
+    const HASH_VALUE = event.headers["x-file-hash"] as string;
+    console.log(event.headers);
     if (HASH_VALUE === undefined) {
       console.log(event.body);
       throw new Error(`Cant get hash from headers ${FORM_DATA}`);

@@ -44,13 +44,13 @@ export const uploadFiles = async (
   const PATH = `/users/${userId}/file`;
   let data = new FormData();
   data.append("file", fileToUpload);
-  data.append("fileHash", fileHash);
   const RESPONSE = await (
     await fetch(`${BASE_URL}${PATH}`, {
       headers: {
         Authorization: TOKEN,
         "X-Amz-Date": new Date().toUTCString(),
         "Content-Type": "multipart/form-data",
+        "X-File-Hash": fileHash,
       },
       body: data,
       method: "POST",
